@@ -8,11 +8,6 @@ import base64
 import pickle
 import os
 
-# Ana pencereyi oluştur
-root = tk.Tk()
-root.title("DNA ve RSA ile RGB Görüntü Şifreleme ve Çözme")
-root.geometry("600x500")
-
 # Görüntüyü yükleme fonksiyonu
 def load_image():
     file_path = filedialog.askopenfilename(
@@ -65,16 +60,7 @@ dna_encoding_rules = {
     8: {'A': '11', 'T': '00', 'G': '10', 'C': '01'}
 }
 
-# Şifreleme için kullanılacak DNA kuralı
-selected_rule = 1
-rule = dna_encoding_rules[selected_rule]
-
-dna_decoding_rules = {} # Dna decoding yapımında işlem tersten olacağı için var olan tabloyu tersten oluşturuyoruz.
-
-for nucleotide, binary_code in rule.items():
-    dna_decoding_rules[binary_code] = nucleotide
-
-def dna_encode(byte_data):
+def dna_encode(byte_data, rule_key):
     """
     Byte dizisini DNA baz dizisine dönüştürür.
     
@@ -95,6 +81,14 @@ def dna_encode(byte_data):
         - Binary uzunluk tek sayıysa sonuna '0' eklenerek çift yapılır
         - Tanımsız 2-bit gruplar için varsayılan 'A' kullanılır
     """
+    
+    rule = dna_encoding_rules[rule_key]
+
+    dna_decoding_rules = {} # Dna decoding yapımında işlem tersten olacağı için var olan tabloyu tersten oluşturuyoruz.
+
+    for nucleotide, binary_code in rule.items():
+        dna_decoding_rules[binary_code] = nucleotide
+    
     binary_str = ''
     for b in byte_data:
         # Her byte'ı 8 bitlik binary stringe çevir
@@ -115,7 +109,7 @@ def dna_encode(byte_data):
             dna_encoded += 'A'
     return dna_encoded
 
-def dna_decode(dna_string):
+def dna_decode(dna_string, rule_key):
     """
     DNA baz dizisini orijinal byte verisine dönüştürür.
     
@@ -138,6 +132,14 @@ def dna_decode(dna_string):
         - Binary uzunluk 8'in katı değilse sonuna '0' eklenir
         - DNA kodlama kuralı, global 'rule' sözlüğüne bağlıdır
     """
+    
+    rule = dna_encoding_rules[rule_key]
+
+    dna_decoding_rules = {} # Dna decoding yapımında işlem tersten olacağı için var olan tabloyu tersten oluşturuyoruz.
+
+    for nucleotide, binary_code in rule.items():
+        dna_decoding_rules[binary_code] = nucleotide
+    
     binary_str = ''
     for nuc in dna_string:
         if nuc in rule:
@@ -161,6 +163,12 @@ def dna_decode(dna_string):
         byte_data.append(int(byte, 2))
     
     return byte_data
+
+def dna_to_numeric(dna_sequence):
+    # DNA bazlarını sayısal değerlere eşle
+    mapping = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+    numeric_sequence = [mapping[base] for base in dna_sequence]
+    return numeric_sequence
 
 def xor_encrypt(data, key):
     """
@@ -188,190 +196,177 @@ def xor_encrypt(data, key):
 
 def xor_decrypt(data, key):
     """
-        XOR ile şifrelenmiş veriyi çözer (XOR şifreleme simetrik olduğu için 
-        şifreleme ile çözme işlemi aynıdır)
+    XOR ile şifrelenmiş veriyi çözer (XOR şifreleme simetrik olduğu için 
+    şifreleme ile çözme işlemi aynıdır)
+    
+    Parametreler:
+        data (bytes/bytearray): Çözülecek veri
+        key (int): Şifrelemede kullanılan anahtar (1 byte)
         
-        Parametreler:
-            data (bytes/bytearray): Çözülecek veri
-            key (int): Şifrelemede kullanılan anahtar (1 byte)
-            
-        Dönüş Değeri:
-            bytearray: Çözülmüş orijinal veri
+    Dönüş Değeri:
+        bytearray: Çözülmüş orijinal veri
     """
     # XOR şifreleme simetrik olduğundan çözme işlemi de aynıdır
     return xor_encrypt(data, key)
 
+import random
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import pickle
+
+def logistic_map(x0, r, size):
+    sequence = []
+    x = x0
+    for _ in range(size):
+        x = r * x * (1 - x)
+        sequence.append(int(x * 256) % 256)  # 0-255 arası byte verisi
+    return sequence
+
 def encrypt_image():
+    
     """
-        RGB bir görüntüyü DNA kodlama, XOR şifreleme ve RSA şifreleme adımlarıyla güvenli şekilde şifreler.
+        Veriyi hem XOR hem logistic map ile şifreler. XOR anahtarı ve logistic map 
+        parametreleri rastgele oluşturulur ve metadata içinde saklanır. Metadata, 
+        RSA ile şifrelenip birlikte kaydedilir.
 
         Adımlar:
-        - Görüntü boyut bilgilerini (metadata) hazırlar.
-        - Her renk kanalı için:
-            - DNA kodlama uygular.
-            - XOR şifreleme ile gizler.
-            - RSA algoritması ile blok bazlı şifreler.
-        - Metadata'yı da XOR + RSA ile şifreler.
-        - Şifreli kanal verilerini ve metadata'yı 'sifreli_data.bin' dosyasına kaydeder.
-        - RSA anahtar çiftini (public ve private) PEM formatında dışa aktarır.
+        - Rastgele XOR anahtarı ve logistic parametreleri oluşturulur.
+        - Veriye logistic + XOR kombinasyonu uygulanır.
+        - Metadata RSA ile şifrelenir.
+        - Şifreli veri ve metadata birlikte dosyaya yazılır.
 
-        Parametre gerektirmez, GUI üzerindeki girdilerle çalışır.
+        Güvenli ve simetrik olmayan anahtar koruma sağlar.
     """
-    if not 'image_path' in globals() or not image_path:
-        messagebox.showerror("Hata", "Lütfen bir resim yükleyin.")
+    
+    if original_img is None:
+        messagebox.showerror("Hata", "Lütfen önce bir görüntü yükleyin.")
         return
 
     try:
-        xor_key = int(xor_key_entry.get()) if xor_key_entry.get() else 123
+        # Görüntüyü byte dizisine çevir (flatten edilmiş RGB değerleri)
+        img_data = original_img.flatten().tolist()
         
-        # RGB görüntüsünü kanallarına ayırma
-        img = original_img
-        h, w, c = img.shape
+        # 1. Rastgele XOR anahtarı üret (1-255)
+        dna_rule_key = random.randint(1, 8)
         
-        # Metadata'yı şifreleyeceğimiz için önce düz metin olarak hazırlayalım
-        metadata_str = f"{h}:{w}:{c}"
+        # 2. Rastgele XOR anahtarı üret (1-255)
+        xor_key = random.randint(1, 255)
+
+        # 3. Logistic map parametreleri üret
+        x0 = random.uniform(0.4, 0.6)
+        r = random.uniform(3.9, 4.0)
+
+        # 4. Logistic dizisi oluştur
+        logistic_seq = logistic_map(x0, r, len(img_data))
         
-        # Her renk kanalı için ayrı şifreleme işlemi uygula
-        encrypted_channels = []
+        dna_encrypted_data = dna_encode(img_data, dna_rule_key)
         
-        for channel_idx in range(c):
-            channel_data = img[:,:,channel_idx].flatten()
-            
-            # DNA kodlama
-            dna_encoded = dna_encode(channel_data)
-            
-            # XOR şifreleme
-            xor_encrypted = xor_encrypt(bytearray(dna_encoded, 'utf-8'), xor_key)
-            
-            encrypted_channels.append(xor_encrypted)
-        
-        # RSA anahtar çifti oluştur
-        key = RSA.generate(2048)
-        public_key = key.publickey()
-        private_key = key
+        numeric_dna_data = dna_to_numeric(dna_encrypted_data)
+
+        # 5. Veriyi şifrele (hem logistic hem xor ile)
+        encrypted = bytearray([
+            b ^ logistic_seq[i] ^ xor_key for i, b in enumerate(img_data)
+        ])
+
+        # 6. Metadata hazırla
+        metadata = {
+            'xor_key': xor_key,
+            'x0': x0,
+            'r': r,
+            'shape': original_img.shape  # Görüntü boyutunu da kaydet
+        }
+
+        # 7. RSA anahtarı oluştur
+        rsa_key = RSA.generate(2048)
+        public_key = rsa_key.publickey()
+        private_key = rsa_key
 
         with open("rsa_private.pem", "wb") as f:
             f.write(private_key.export_key())
-
         with open("rsa_public.pem", "wb") as f:
             f.write(public_key.export_key())
-        
-        # RSA şifrelemesi için PKCS1_OAEP şifreleme oluşturucu
+
+        # 8. Metadata'yı RSA ile şifrele
         cipher_rsa = PKCS1_OAEP.new(public_key)
-        
-        # Metadata'yı şifrele
-        # Metadata'yı önce bir hash ile karıştırıp, sonra şifreleyelim
-        metadata_bytes = metadata_str.encode('utf-8')
-        hashed_metadata = bytearray([b ^ (xor_key * 2) for b in metadata_bytes])  # Farklı bir XOR anahtarı kullanarak hash
-        encrypted_metadata = cipher_rsa.encrypt(bytes(hashed_metadata))
-        
-        # Her kanal için RSA şifreleme
-        rsa_encrypted_channels = []
-        
-        for channel_data in encrypted_channels:
-            # RSA blok boyutu sınırlı olduğundan, veriyi bloklara bölerek şifrele
-            encrypted_blocks = []
-            block_size = 190  # RSA 2048 için güvenli blok boyutu
-            
-            for i in range(0, len(channel_data), block_size):
-                block = channel_data[i:i+block_size]
-                encrypted_block = cipher_rsa.encrypt(bytes(block))
-                encrypted_blocks.append(encrypted_block)
-            
-            rsa_encrypted_channels.append(encrypted_blocks)
-        
-        # Tüm şifrelenmiş kanalları ve şifrelenmiş meta verileri pickle ile dosyaya kaydet
-        encrypted_data = {
-            'encrypted_metadata': encrypted_metadata,
-            'channels': rsa_encrypted_channels
+        metadata_bytes = pickle.dumps(metadata)
+        encrypted_metadata = cipher_rsa.encrypt(metadata_bytes)
+
+        # 9. Şifreli verileri kaydet
+        encrypted_package = {
+            'encrypted_data': encrypted,
+            'encrypted_metadata': encrypted_metadata
         }
-        
-        with open("sifreli_data.bin", "wb") as f:
-            pickle.dump(encrypted_data, f)
-        
-        # Kullanıcıya başarılı mesajı göster
-        messagebox.showinfo("Başarılı", "RGB görüntü şifreleme tamamlandı. Anahtarlar ve şifreli veri kaydedildi.")
-    
+
+        with open("sifreli_karma_data.bin", "wb") as f:
+            pickle.dump(encrypted_package, f)
+
+        messagebox.showinfo("Başarılı", "Görüntü başarıyla şifrelendi ve kaydedildi.")
+
     except Exception as e:
-        messagebox.showerror("Hata", f"Şifreleme sırasında bir hata oluştu: {str(e)}")
+        messagebox.showerror("Hata", f"Şifreleme sırasında hata oluştu: {str(e)}")
+
+
 
 def decrypt_image():
+    """
+    RSA ile şifrelenmiş metadata içinden XOR anahtarı ve logistic map parametrelerini alır.
+    Bu parametrelerle aynı kaotik dizi üretilir. XOR ve logistic işlemleri simetrik olduğu 
+    için aynı işlem tekrar edilerek veri çözülür. Sonuç görüntü olarak gösterilir.
+    """
+
+    if not os.path.exists("rsa_private.pem") or not os.path.exists("sifreli_karma_data.bin"):
+        messagebox.showerror("Hata", "Gerekli şifreli dosyalar bulunamadı.")
+        return
+
     try:
-        # Şifreli verileri ve RSA özel anahtarı yükle
-        with open("sifreli_data.bin", "rb") as f:
-            encrypted_data = pickle.load(f)
-        
+        # 1. RSA özel anahtarını yükle
         with open("rsa_private.pem", "rb") as f:
             private_key = RSA.import_key(f.read())
-        
-        # XOR anahtarını al
-        xor_key = int(xor_key_entry.get()) if xor_key_entry.get() else 123
-        
-        # RSA şifre çözücü oluştur
+
         cipher_rsa = PKCS1_OAEP.new(private_key)
+
+        # 2. Şifreli veriyi ve şifreli metadata'yı yükle
+        with open("sifreli_karma_data.bin", "rb") as f:
+            encrypted_package = pickle.load(f)
+
+        encrypted_data = encrypted_package['encrypted_data']
+        encrypted_metadata = encrypted_package['encrypted_metadata']
+
+        # 3. Metadata'yı RSA ile çöz
+        metadata_bytes = cipher_rsa.decrypt(encrypted_metadata)
+        metadata = pickle.loads(metadata_bytes)
+
+        xor_key = metadata['xor_key']
+        x0 = metadata['x0']
+        r = metadata['r']
+
+        # 4. Logistic dizi oluştur
+        logistic_seq = logistic_map(x0, r, len(encrypted_data))
+
+        # 5. Veriyi çöz (XOR + logistic terslenmiş hali aynı işlem)
+        decrypted = bytearray([
+            b ^ logistic_seq[i] ^ xor_key for i, b in enumerate(encrypted_data)
+        ])
+
+        # 6. Görüntüyü yeniden oluştur
+        if img_shape is None:
+            raise ValueError("Orijinal görüntü boyutu tanımlı değil.")
         
-        # Metadata'yı çöz
-        encrypted_metadata = encrypted_data['encrypted_metadata']
-        hashed_metadata = cipher_rsa.decrypt(encrypted_metadata)
-        metadata_bytes = bytearray([b ^ (xor_key * 2) for b in hashed_metadata])  # XOR ile çöz
-        metadata_str = metadata_bytes.decode('utf-8')
-        
-        # Metadata'yı parse et
-        h, w, c = map(int, metadata_str.split(':'))
-        
-        # Her şifrelenmiş kanalı çöz
-        decrypted_channels = []
-        
-        for encrypted_channel in encrypted_data['channels']:
-            # RSA ile şifrelenmiş blokların her birini çöz
-            decrypted_data = bytearray()
-            
-            for encrypted_block in encrypted_channel:
-                decrypted_block = cipher_rsa.decrypt(encrypted_block)
-                decrypted_data.extend(decrypted_block)
-            
-            # XOR şifrelemesini çöz
-            xor_decrypted = xor_decrypt(decrypted_data, xor_key)
-            
-            # DNA kodlamasını çöz
-            dna_string = xor_decrypted.decode('utf-8', errors='replace')
-            channel_bytes = dna_decode(dna_string)
-            
-            # Kanalı pixel dizisine dönüştür
-            channel_array = np.array(channel_bytes, dtype=np.uint8)
-            
-            # Eğer boyut uyuşmuyorsa, düzelt
-            if len(channel_array) < h * w:
-                padding = h * w - len(channel_array)
-                channel_array = np.pad(channel_array, (0, padding), 'constant')
-            elif len(channel_array) > h * w:
-                channel_array = channel_array[:h*w]
-            
-            # Kanalı yeniden şekillendir
-            channel_reshaped = channel_array.reshape((h, w))
-            decrypted_channels.append(channel_reshaped)
-        
-        # Tüm kanalları birleştirerek RGB görüntüsü oluştur
-        decrypted_image = np.stack(decrypted_channels, axis=2)
-        
-        # Çözülmüş görüntüyü kaydet ve göster
-        cv2.imwrite("decrypted_image.png", decrypted_image)
-        
-        # Görüntüyü göster
-        img_display = cv2.resize(decrypted_image, (400, 400))
-        cv2.imshow("Çözülen RGB Görüntü", img_display)
+        decrypted_np = np.frombuffer(decrypted, dtype=np.uint8).reshape(img_shape)
+
+        # 7. Görüntüyü göster
+        img_resized = cv2.resize(decrypted_np, (400, 400))
+        cv2.imshow("Cozulen Goruntu", img_resized)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        
-        messagebox.showinfo("Başarılı", "RGB görüntünün şifresi çözüldü ve 'decrypted_image.png' olarak kaydedildi.")
-    
-    except FileNotFoundError:
-        messagebox.showerror("Hata", "Gerekli dosyalar bulunamadı. Önce bir görüntüyü şifrelemeniz gerekiyor.")
-    
+
+        messagebox.showinfo("Başarılı", "Şifre çözme işlemi tamamlandı ve görüntü başarıyla geri yüklendi.")
+
     except Exception as e:
-        messagebox.showerror("Hata", f"Şifre çözme sırasında bir hata oluştu: {str(e)}")
-        import traceback
-        traceback.print_exc()
+        messagebox.showerror("Hata", f"Şifre çözme sırasında hata oluştu: {str(e)}")
+
+
+'''
 def change_dna_rule():
     try:
         global selected_rule, rule, dna_decoding_rules
@@ -434,7 +429,13 @@ def show_transformation_steps():
     
     except Exception as e:
         messagebox.showerror("Hata", f"Dönüşüm aşamalarını gösterirken hata: {str(e)}")
+'''
 
+# Ana pencereyi oluştur
+root = tk.Tk()
+root.title("DNA ve RSA ile RGB Görüntü Şifreleme ve Çözme")
+root.geometry("600x500")
+ 
 # Arayüz elemanları
 frame = tk.Frame(root)
 frame.pack(pady=10)
@@ -447,31 +448,6 @@ btn_show_steps.grid(row=0, column=1, padx=10, pady=5)
 
 img_info_label = tk.Label(root, text="Henüz görüntü yüklenmedi.")
 img_info_label.pack(pady=5)
-
-# DNA kural seçimi
-rule_frame = tk.Frame(root)
-rule_frame.pack(pady=10)
-
-rule_label = tk.Label(rule_frame, text="DNA Kodlama Kuralı (1-8):")
-rule_label.grid(row=0, column=0, padx=5)
-
-rule_entry = tk.Entry(rule_frame, width=5)
-rule_entry.insert(0, "1")  # Varsayılan kural
-rule_entry.grid(row=0, column=1, padx=5)
-
-btn_change_rule = tk.Button(rule_frame, text="Kuralı Değiştir", command=change_dna_rule)
-btn_change_rule.grid(row=0, column=2, padx=5)
-
-# XOR anahtarı girişi
-xor_frame = tk.Frame(root)
-xor_frame.pack(pady=10)
-
-xor_label = tk.Label(xor_frame, text="XOR Anahtarı:")
-xor_label.grid(row=0, column=0, padx=5)
-
-xor_key_entry = tk.Entry(xor_frame, width=10)
-xor_key_entry.insert(0, "123")  # Varsayılan XOR anahtarı
-xor_key_entry.grid(row=0, column=1, padx=5)
 
 # Şifreleme ve çözme butonları
 btn_frame = tk.Frame(root)
