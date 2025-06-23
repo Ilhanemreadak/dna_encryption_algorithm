@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DNA Şifreleme Arayüzü</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .section-title { margin-top: 2rem; margin-bottom: 1rem; }
+        .img-preview, .placeholder-box { max-height: 200px; width: 100%; border: 1px solid #ccc; margin-bottom: 1rem; }
+        .placeholder-box { display: flex; align-items: center; justify-content: center; color: #999; background-color: #fff; border: 2px dashed #ccc; padding: 1rem; font-size: 1rem; height: 200px; transition: all 0.2s ease; }
+        .placeholder-box:hover { background-color: #f4f4f4; border-color: #999; }
+        .hidden { display: none !important; }
+        footer { margin-top: 4rem; padding: 1rem 0; background-color: #e9ecef; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+    <h1 class="text-center mb-4">DNA Tabanlı Görüntü Şifreleme Arayüzü</h1>
+
+    <div class="row">
+        
+        <div class="col-md-6 text-center">
+            <h5 class="section-title">Girdi Görseli</h5>
+
+            <div id="inputDropArea" class="placeholder-box" style="cursor: pointer;">
+                <i class="bi bi-upload" style="font-size: 2rem;"></i>&nbsp; Görsel yüklemek için tıklayın ya da sürükleyin
+            </div>
+
+            <img id="inputImage" src="#" alt="Girdi Görseli" class="img-fluid img-preview hidden">
+            <input id="imageUpload" type="file" class="d-none" accept="image/*">
+
+            <div class="d-flex justify-content-center gap-2 mt-2">
+                <button id="uploadBtn" class="btn btn-outline-primary">Yükle</button>
+                <button id="showExamplesBtn" class="btn btn-outline-primary ml-2">Örnekler</button>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <h5 class="section-title">Çıktı Görseli</h5>
+
+            <div id="outputPlaceholder" class="placeholder-box" style="cursor: default;">
+                <i class="bi bi-eye" style="font-size: 2rem;"></i>&nbsp; Henüz çıktı oluşturulmadı
+            </div>
+
+            <img id="outputImage" src="#" alt="Çıktı Görseli" class="img-fluid img-preview hidden">
+
+            <div class="mt-2">
+                <button id="saveBtn" class="btn btn-outline-success">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-4 text-center">
+        <label for="keyInput" class="form-label">Şifre (Key):</label>
+        <input id="keyInput" type="text" class="form-control w-50 mx-auto" placeholder="Opsiyonel olarak manuel şifre girin">
+        <div class="mt-3">
+            <button id="encryptBtn" class="btn btn-primary me-2">Şifrele</button>
+            <button id="decryptBtn" class="btn btn-secondary">Çöz</button>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mb-4">
+        <div>
+            <h5>Testler</h5>
+            <button id="cropAttackBtn" class="btn btn-sm btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#cropModal">
+                Crop Attack
+            </button>
+            <button id="noiseAttackBtn" class="btn btn-sm btn-outline-dark me-2" data-bs-toggle="modal" data-bs-target="#noiseModal">
+                Noise Attack
+            </button>
+            <button id="keySensBtn" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#keySensModal">
+                Key Sensitivity
+            </button>
+        </div>
+        <div>
+            <h5>Parametreler</h5>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paramModal">Parametreleri Değiştir</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paramModal" tabindex="-1" aria-labelledby="paramModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paramModalLabel">Şifreleme Parametreleri</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="dnaRuleSelect">DNA Kuralı:</label>
+                    <select id="dnaRuleSelect" class="form-select mb-2">
+                        <option>1</option><option>2</option><option>3</option><option>4</option>
+                        <option>5</option><option>6</option><option>7</option><option>8</option>
+                    </select>
+                    <label>Logistic Map x0:</label>
+                    <div class="d-flex gap-2 mb-2">
+                        <input id="x0_1" type="number" class="form-control" value="0.41" step="0.01">
+                        <input id="x0_2" type="number" class="form-control" value="0.51" step="0.01">
+                        <input id="x0_3" type="number" class="form-control" value="0.61" step="0.01">
+                    </div>
+                    <label>Logistic Map r:</label>
+                    <div class="d-flex gap-2">
+                        <input id="r_1" type="number" class="form-control" value="3.99" step="0.01">
+                        <input id="r_2" type="number" class="form-control" value="3.99" step="0.01">
+                        <input id="r_3" type="number" class="form-control" value="3.99" step="0.01">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <h5>Analizler</h5>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <h6>Girdi Görseli Analizi</h6>
+                <button id="analyzeInputBtn" class="btn btn-sm btn-outline-info mb-2">Analiz Et</button>
+                <img id="histInputImg" src="#" class="img-fluid img-preview">
+                <img id="corrInputImg" src="#" class="img-fluid img-preview">
+                <p>PSNR: <span id="psnrInputValue">-</span> dB</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <h6>Çıktı Görseli Analizi</h6>
+                <button id="analyzeOutputBtn" class="btn btn-sm btn-outline-info mb-2">Analiz Et</button>
+                <img id="histOutputImg" src="#" class="img-fluid img-preview">
+                <img id="corrOutputImg" src="#" class="img-fluid img-preview">
+                <p>PSNR: <span id="psnrValue">-</span> dB</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>DNA Şifreleme Algoritması Projesi &copy; 2025</footer>
+
+    <!-- Crop Attack Modal -->
+    <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cropModalLabel">Crop Attack Ayarları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <label for="cropWidth" class="form-label">Genişlik (px):</label>
+                <input id="cropWidth" type="number" class="form-control mb-3" value="100" min="1">
+
+                <label for="cropHeight" class="form-label">Yükseklik (px):</label>
+                <input id="cropHeight" type="number" class="form-control" value="100" min="1">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cropDecryptBtn" class="btn btn-primary">
+                Crop &amp; Çöz
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noise Modal -->
+    <div class="modal fade" id="noiseModal" tabindex="-1" aria-labelledby="noiseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noiseModalLabel">Noise Attack Ayarları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <label for="noiseType" class="form-label">Noise Tipi:</label>
+                <select id="noiseType" class="form-select mb-3">
+                <option value="gaussian">Gaussian</option>
+                <option value="salt_pepper">Salt &amp; Pepper</option>
+                </select>
+                <label for="noiseStrength" class="form-label">Güç (Gaussian için varyans, S&P için oran 0–1):</label>
+                <input id="noiseStrength" type="number" class="form-control" value="0.01" step="0.01" min="0.001" max="1">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="noiseDecryptBtn" class="btn btn-primary">
+                Noise &amp; Çöz
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Sensitivity Modal -->
+    <div class="modal fade" id="keySensModal" tabindex="-1" aria-labelledby="keySensModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="keySensModalLabel">Key Sensitivity Ayarları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <label for="keySensInput" class="form-label">Şifre (Key):</label>
+                <input id="keySensInput" type="text" class="form-control mb-3" placeholder="Örn: mySecret123">
+
+                <button id="showBitsBtn" class="btn btn-outline-secondary mb-2">Bit Göster</button>
+
+                <!-- Her bit için bir span, tıklayınca 0↔1 toggle -->
+                <div id="bitDisplay" class="border p-2 hidden" style="font-family: monospace; white-space: pre-wrap;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="applyKeySensBtn" class="btn btn-primary">Uygula &amp; Çöz</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Örnek Görseller</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Görsel</th>
+                            <th>Dosya Adı</th>
+                        </tr>
+                        </thead>
+                        <tbody id="exampleImages"></tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    let currentDir = '';
+
+    // Yükle butonuna tıklayınca dosya input'u tetiklensin
+    document.getElementById('uploadBtn').addEventListener('click', () => {
+        document.getElementById('imageUpload').click();
+    });
+
+    // Input değiştiğinde dosyayı göster
+    document.getElementById('imageUpload').addEventListener('change', event => {
+        const file = event.target.files[0]; 
+        if (!file) return;
+        currentDir = '';  // önceki analiz temizlensin
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            document.getElementById('inputImage').src = reader.result;
+            document.getElementById('inputImage').classList.remove('hidden');
+            document.getElementById('inputDropArea').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Sürükle bırak desteği
+    const dropArea = document.getElementById('inputDropArea');
+
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('border-primary');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('border-primary');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('border-primary');
+
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        currentDir = '';
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            document.getElementById('inputImage').src = reader.result;
+            document.getElementById('inputImage').classList.remove('hidden');
+            dropArea.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+
+        // 🔧 Ayrıca input'a da dosyayı ata
+        document.getElementById('imageUpload').files = e.dataTransfer.files;
+    });
+
+
+    // Şifrele
+    document.getElementById('encryptBtn').addEventListener('click', async () => {
+        const file = document.getElementById('imageUpload').files[0];
+        if (!file) return alert('Önce girdi görseli yükleyin.');
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('key', document.getElementById('keyInput').value);
+        formData.append('dna_rule', document.getElementById('dnaRuleSelect').value);
+        for (let i = 1; i <= 3; i++) {
+            formData.append('x0[]', document.getElementById(`x0_${i}`).value);
+            formData.append('r[]', document.getElementById(`r_${i}`).value);
+        }
+        const res = await fetch('/encrypt', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.status === 'success') {
+            currentDir = data.directory;
+            document.getElementById('outputImage').src = data.image_url;
+            document.getElementById('outputImage').classList.remove('hidden');
+            document.getElementById('outputPlaceholder').classList.add('hidden');
+        } else {
+            alert('Şifreleme hatası: ' + data.message);
+        }
+    });
+
+    // Çöz
+    document.getElementById('decryptBtn').addEventListener('click', async () => {
+        // File-input’tan şifreli dosyayı oku
+        const file = document.getElementById('imageUpload').files[0];
+        if (!file) return alert('Önce şifrelenmiş görseli yükleyin.');
+
+        // FormData’ya ekle
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('key', document.getElementById('keyInput').value);
+
+        // İsteği at
+        const res = await fetch('/decrypt', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            // Sunucudan gelen klasör adını sakla ki analizler çalışsın
+            currentDir = data.directory;
+
+            // Çözülmüş görseli göster
+            const out = document.getElementById('outputImage');
+            out.src = data.image_url;
+            out.classList.remove('hidden');
+            document.getElementById('outputPlaceholder').classList.add('hidden');
+        } else {
+            alert('Çözme hatası: ' + data.message);
+        }
+    });
+
+    // Girdi Analizi
+    document.getElementById('analyzeInputBtn').addEventListener('click', async () => {
+        const file = document.getElementById('imageUpload').files[0];
+        if (!file) return alert('Lütfen bir girdi görseli yükleyin.');
+
+        const fd = new FormData();
+        fd.append('input', file);  // artık input alanı olarak gönderiyoruz
+
+        const res = await fetch('/analyze', { method: 'POST', body: fd });
+        const d = await res.json();
+        if (d.status === 'success') {
+            currentDir = d.directory;
+            document.getElementById('histInputImg').src = d.hist_url;
+            document.getElementById('corrInputImg').src = d.corr_url;
+            document.getElementById('psnrInputValue').textContent = d.psnr;
+        } else {
+            alert('Girdi analizi hatası: ' + d.message);
+        }
+    });
+
+    // Çıktı Analizi
+    document.getElementById('analyzeOutputBtn').addEventListener('click', async () => {
+        const inputSrc = document.getElementById('inputImage').src;
+        const outputSrc = document.getElementById('outputImage').src;
+
+        if (!inputSrc || inputSrc.endsWith('#')) return alert('Girdi görseli yok.');
+        if (!outputSrc || outputSrc.endsWith('#')) return alert('Çıktı görseli yok.');
+
+        const inputBlob = await fetch(inputSrc).then(res => res.blob());
+        const outputBlob = await fetch(outputSrc).then(res => res.blob());
+
+        const fd = new FormData();
+        fd.append('input', inputBlob, 'input.png');
+        fd.append('output', outputBlob, 'output.png');
+
+        const res = await fetch('/analyze', { method: 'POST', body: fd });
+        const d = await res.json();
+        if (d.status === 'success') {
+            currentDir = d.directory;
+            document.getElementById('histOutputImg').src = d.hist_url;
+            document.getElementById('corrOutputImg').src = d.corr_url;
+            document.getElementById('psnrValue').textContent = d.psnr;
+        } else {
+            alert('Çıktı analizi hatası: ' + d.message);
+        }
+    });
+
+    // Crop Attack
+    // Crop & Çöz
+    document.getElementById('cropDecryptBtn').addEventListener('click', async () => {
+        const w = parseInt(document.getElementById('cropWidth').value,  10);
+        const h = parseInt(document.getElementById('cropHeight').value, 10);
+        if (w <= 0 || h <= 0) return alert('Geçerli boyut girin.');
+
+        // 1) Crop request
+        const fd = new FormData();
+        fd.append('width', w);
+        fd.append('height', h);
+        if (currentDir) {
+            fd.append('directory', currentDir);
+        } else {
+            const f = document.getElementById('imageUpload').files[0];
+            if (!f) return alert('Önce dosya seçin.');
+            fd.append('image', f);
+        }
+
+        const cropRes = await fetch('/crop_attack', { method: 'POST', body: fd });
+        const cropData = await cropRes.json();
+        if (cropData.status !== 'success') {
+            return alert('Crop hatası: ' + cropData.message);
+        }
+
+        // 2) Güncellenmiş girdi görselini göster
+        currentDir = cropData.directory;
+        const inp = document.getElementById('inputImage');
+        inp.src = cropData.cropped_url;
+        inp.classList.remove('hidden');
+        document.getElementById('inputDropArea').classList.add('hidden');
+        new bootstrap.Modal(document.getElementById('cropModal')).hide();
+
+        // 3) Decrypt request (directory param’li)
+        const fd2 = new FormData();
+        fd2.append('directory', currentDir);
+        fd2.append('key', document.getElementById('keyInput').value);
+
+        const decRes = await fetch('/decrypt', { method: 'POST', body: fd2 });
+        const decData = await decRes.json();
+        if (decData.status !== 'success') {
+            return alert('Çözme hatası: ' + decData.message);
+        }
+
+        // 4) Çıktıyı göster
+        const out = document.getElementById('outputImage');
+        out.src = decData.image_url;
+        out.classList.remove('hidden');
+        document.getElementById('outputPlaceholder').classList.add('hidden');
+    });
+
+    // Noise Attack
+    document.getElementById('noiseDecryptBtn').addEventListener('click', async () => {
+        const type = document.getElementById('noiseType').value;
+        const strength = parseFloat(document.getElementById('noiseStrength').value);
+        if (isNaN(strength) || strength <= 0) {
+            return alert('Geçerli bir güç değeri girin.');
+        }
+
+        // 1) Noise isteği
+        const fd = new FormData();
+        fd.append('type', type);
+        fd.append('strength', strength);
+        if (currentDir) {
+            fd.append('directory', currentDir);
+        } else {
+            const f = document.getElementById('imageUpload').files[0];
+            if (!f) return alert('Önce dosya seçin.');
+            fd.append('image', f);
+        }
+
+        const res = await fetch('/noise_attack', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.status !== 'success') {
+            return alert('Noise hatası: ' + data.message);
+        }
+
+        // 2) Ana ekranda güncelle
+        currentDir = data.directory;
+        const inp = document.getElementById('inputImage');
+        inp.src = data.noised_url;
+        inp.classList.remove('hidden');
+        document.getElementById('inputDropArea').classList.add('hidden');
+        new bootstrap.Modal(document.getElementById('noiseModal')).hide();
+
+        // 3) Decrypt isteği
+        const fd2 = new FormData();
+        fd2.append('directory', currentDir);
+        fd2.append('key', document.getElementById('keyInput').value);
+
+        const decRes = await fetch('/decrypt', { method: 'POST', body: fd2 });
+        const decData = await decRes.json();
+        if (decData.status !== 'success') {
+            return alert('Çözme hatası: ' + decData.message);
+        }
+
+        // 4) Çıktıyı göster
+        const out = document.getElementById('outputImage');
+        out.src = decData.image_url;
+        out.classList.remove('hidden');
+        document.getElementById('outputPlaceholder').classList.add('hidden');
+    });
+
+    // Key Sensitivity
+    // 1) Bit Gösterme & Toggle
+    document.getElementById('showBitsBtn').addEventListener('click', () => {
+        const key = document.getElementById('keySensInput').value;
+        if (!key) return alert('Önce bir şifre girin.');
+        // String → bit dizisi
+        const bits = Array.from(key).map(ch =>
+            ch.charCodeAt(0).toString(2).padStart(8, '0')
+        ).join('');
+        // container’ı temizle
+        const disp = document.getElementById('bitDisplay');
+        disp.innerHTML = '';
+        // Her bit için span oluştur
+        bits.split('').forEach((b, idx) => {
+            const span = document.createElement('span');
+            span.textContent = b;
+            span.classList.add('bit-span');
+            span.style.cursor = 'pointer';
+            span.style.marginRight = '2px';
+            // tıklayınca toggle
+            span.addEventListener('click', () => {
+            span.textContent = span.textContent === '0' ? '1' : '0';
+            });
+            disp.appendChild(span);
+        });
+        disp.classList.remove('hidden');
+    });
+
+    // 2) Uygula & Çöz
+    document.getElementById('applyKeySensBtn').addEventListener('click', async () => {
+        // 2.1) Editlenmiş bit’leri oku
+        const spans = Array.from(document.querySelectorAll('#bitDisplay .bit-span'));
+        if (spans.length === 0) return alert('Önce "Bit Göster" yapın.');
+        const bits = spans.map(s => s.textContent).join('');
+        // 2.2) Bit → karakter dizisi
+        let newKey = '';
+        for (let i = 0; i < bits.length; i += 8) {
+            const byte = bits.slice(i, i + 8);
+            newKey += String.fromCharCode(parseInt(byte, 2));
+        }
+        // 2.3) Modal’ı kapat
+        new bootstrap.Modal(document.getElementById('keySensModal')).hide();
+
+        // 2.4) Decrypt isteği
+        const fd = new FormData();
+        // directory varsa ekle
+        if (currentDir) {
+            fd.append('directory', currentDir);
+        } else {
+            const f = document.getElementById('imageUpload').files[0];
+            if (!f) return alert('Önce bir dosya seçin.');
+            fd.append('image', f);
+        }
+        fd.append('key', newKey);
+
+        const res = await fetch('/decrypt', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.status !== 'success') {
+            return alert('Çözme hatası: ' + data.message);
+        }
+        // 2.5) Sonucu göster
+        document.getElementById('outputImage').src = data.image_url;
+        document.getElementById('outputImage').classList.remove('hidden');
+        document.getElementById('outputPlaceholder').classList.add('hidden');
+        if (data.directory) currentDir = data.directory;
+    });
+
+    document.getElementById('showExamplesBtn').addEventListener('click', async () => {
+        const container = document.getElementById('exampleImages');
+        container.innerHTML = '';
+
+        const res = await fetch('/example_images');
+        const d = await res.json();
+
+        if (d.status === 'success') {
+            d.images.forEach(async url => {
+            const tr = document.createElement('tr');
+            const tdImg = document.createElement('td');
+            const tdName = document.createElement('td');
+
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = url.split('/').pop();
+            img.style.width = '50px';
+            img.style.height = '50px';
+            img.style.cursor = 'pointer';
+            img.classList.add('rounded', 'border');
+
+            img.addEventListener('click', async () => {
+                const blob = await fetch(url).then(r => r.blob());
+                const file = new File([blob], img.alt, { type: blob.type });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('imageUpload').files = dataTransfer.files;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                document.getElementById('inputImage').src = reader.result;
+                document.getElementById('inputImage').classList.remove('hidden');
+                document.getElementById('inputDropArea').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                modal.hide();
+            });
+
+            tdImg.appendChild(img);
+            tdName.textContent = img.alt;
+            tr.appendChild(tdImg);
+            tr.appendChild(tdName);
+            container.appendChild(tr);
+            });
+
+            new bootstrap.Modal(document.getElementById('exampleModal')).show();
+        } else {
+            alert('Örnek görseller yüklenemedi.');
+        }
+    });
+
+});
+</script>
+</body>
+</html>

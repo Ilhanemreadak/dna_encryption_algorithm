@@ -1,2 +1,7 @@
 *.pem
 *.bin
+*.key
+*.crt
+*.p12
+*.jpeg
+*.jpg
