@@ -36,9 +36,9 @@ def encrypt_image(
     """
     try:
         if x0_list is None:
-            x0_list = [0.41, 0.51, 0.61]
+            x0_list = [0.413742, 0.526374, 0.639127]
         if r_list is None:
-            r_list = [3.99, 3.99, 3.99]
+            r_list = [3.987652, 3.992715, 3.996427]
         if len(x0_list) != 3 or len(r_list) != 3:
             raise ValueError("x0_list ve r_list tam olarak 3 eleman içermelidir.")
         if not (1 <= dna_rule <= 8):
@@ -61,11 +61,7 @@ def encrypt_image(
 
         X1 = mask_chaos(X1, key_bytes)
         X2 = mask_chaos(X2, key_bytes[::-1])
-        X3 = mask_chaos(X3, key_bytes[::2])
-
-        print("[encrypt] X1 sample:", X1[:5])
-        print("[encrypt] X2 sample:", X2[:5])
-        print("[encrypt] X3 sample:", X3[:5])     
+        X3 = mask_chaos(X3, key_bytes[::2])  
         
         dna1 = chaos_xor(xord_dna, X1, dna_rule)
         dna2 = chaos_xor(dna1,   X2, dna_rule)
@@ -76,13 +72,6 @@ def encrypt_image(
         bin_scr   = dna_to_binary(scrambled, rule=dna_rule)
         packed    = binary_array_to_bytes(bin_scr)
         arr_enc   = reshape_rgb(np.frombuffer(packed, dtype=np.uint8), arr_rgb.shape)
-        print("[encrypt] dna3 sample:", dna3[:5])
-        print("[encrypt] scrambled sample:", scrambled[:5])
-        print("[encrypt] flat_rgb sample     :", flat_rgb[:8])
-        print("[encrypt] rgb_bits sample     :", rgb_bits[:16])
-        print("[encrypt] bin_scr sample      :", bin_scr[:16])
-        print("[encrypt] packed bytes sample :", packed[:4])
-        print("[encrypt] arr_enc pixel[0]     :", arr_enc[0,0], arr_enc[0,1])
         
         temp_path = output_path + ".tmp.png"
         save_image(arr_enc, temp_path)

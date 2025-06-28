@@ -7,6 +7,7 @@ from pathlib import Path
 from PIL import Image
 from PIL import Image, PngImagePlugin
 import numpy as np
+import time
 
 from encrypt import encrypt_image
 from decrypt import decrypt_image
@@ -14,6 +15,9 @@ from analysis_utils import (
     compute_and_save_histogram,
     compute_and_save_correlation,
     compute_psnr,
+    compute_npcr_uaci,
+    compute_entropy_rgb,
+    compute_average_rgb_neighbor_correlation
 )
 
 app = Flask(__name__)
@@ -44,6 +48,7 @@ def index():
 
 @app.route('/encrypt', methods=['POST'])
 def encrypt_route():
+    start_time = time.time()
     file = request.files.get('image')
     dir_name = request.form.get('directory')
     if dir_name:
@@ -78,11 +83,14 @@ def encrypt_route():
         encrypt_image(input_path, output_path, password, dna_rule, x0_list, r_list)
     except Exception as e:
         return jsonify({'status':'error','message':str(e)}),500
-    return jsonify({'status':'success','image_url':f'/static/uploads/{base}/out/{encrypted_name}','directory':base})
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Encryption took {duration:.6f} seconds")
+    return jsonify({'status':'success','image_url':f'/static/uploads/{base}/out/{encrypted_name}','directory':base, 'duration': duration})
 
 @app.route('/decrypt', methods=['POST'])
 def decrypt_route():
-
+    start_time = time.time()
     # 1) Eğer directory gelmişse, o klasörden oku
     directory = request.form.get('directory')
     if directory:
@@ -114,6 +122,9 @@ def decrypt_route():
         return jsonify(status='error', message=str(e)), 500
 
     url = f"/static/uploads/{directory}/out/{output_name}"
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Decryption took {duration:.6f} seconds")
     return jsonify(status='success', image_url=url, directory=directory)
 
 
@@ -264,19 +275,27 @@ def analyze():
     corr_path = os.path.join(out_dir, f"corr_{filename_wo_ext}.png")
     compute_and_save_histogram(analysis_target_path, hist_path)
     compute_and_save_correlation(analysis_target_path, corr_path)
+    entropy = compute_entropy_rgb(analysis_target_path)
+    correlation = compute_average_rgb_neighbor_correlation(analysis_target_path)
 
     # PSNR hesapla (sadece ikisi varsa)
     if input_path and output_path:
         psnr = compute_psnr(input_path, output_path)
+        npcr, uaci = compute_npcr_uaci(input_path, output_path)
     else:
         psnr = "∞"
+        npcr, uaci = "-", "-"
 
     return jsonify({
         'status': 'success',
         'directory': folder_name,
         'hist_url': f'/static/analysis/{folder_name}/out/hist_{filename_wo_ext}.png',
         'corr_url': f'/static/analysis/{folder_name}/out/corr_{filename_wo_ext}.png',
-        'psnr': psnr
+        'psnr': psnr,
+        'npcr': npcr,
+        'uaci': uaci,
+        'entropy': entropy,
+        'correlation': correlation
     })
 
 @app.route('/example_images', methods=['GET'])

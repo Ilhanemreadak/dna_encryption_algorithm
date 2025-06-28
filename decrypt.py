@@ -37,8 +37,8 @@ def decrypt_image(
             raise ValueError("Salt veya metadata eksik.")
 
         dna_rule = meta.get("dna_rule", 1)
-        x0_list  = meta.get("x0_list", [0.41, 0.51, 0.61])
-        r_list   = meta.get("r_list", [3.99, 3.99, 3.99])
+        x0_list  = meta.get("x0_list", [0.413742, 0.526374, 0.639127])
+        r_list   = meta.get("r_list", [3.987652, 3.992715, 3.996427])
 
         key_bytes = derive_key_from_password(password, salt)[0]
         arr_enc   = np.array(img.convert('RGB'))
