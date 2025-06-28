@@ -1,6 +1,5 @@
 # DNA Tabanlı Görüntü Şifreleme / DNA‑Based Image Encryption
 
-> **Çok dilli README** – Türkçe bölümü ilk sırada, English version aşağıda yer alır.
 
 ---
 
