@@ -43,17 +43,11 @@ Bu depo, RGB görüntüleri **DNA kodlama** ve **kaotik lojistik harita** tabanl
 
 
 ### Mimari ve Akış
-```mermaid
-flowchart TD
-    A[PNG/JPEG Yükle] --> B[RGB Flatten]
-    B --> C[Binary → DNA]
-    C --> D[XOR <br/> Key DNA]
-    D --> E[Lojistik Maske]
-    E --> F[DNA Permütasyonu]
-    F --> G[DNA → Binary]
-    G --> H[RGB Yeniden Şekillendir]
-    H --> I[PNG + tEXt(salt,param)]
-```
+
+![sifrelemeadimlari](https://github.com/user-attachments/assets/93374f64-606c-43ee-addf-52b1f975e559)
+![sifrecozmeakis](https://github.com/user-attachments/assets/70f7e558-960c-467a-bf45-accab41af398)
+
+
 Tüm adımlar modüler fonksiyonlar hâlinde tasarlandığından hem CLI hem Flask rotaları tarafından yeniden kullanılabilir.
 
 
@@ -184,17 +178,9 @@ This repository offers a full‑stack solution (CLI + Flask UI) for encrypting
 
 
 ### Architecture & Flow
-```mermaid
-flowchart TD
-    A[Load PNG/JPEG] --> B[RGB Flatten]
-    B --> C[Binary → DNA]
-    C --> D[XOR <br/> Key DNA]
-    D --> E[Logistic Mask]
-    E --> F[DNA Permutation]
-    F --> G[DNA → Binary]
-    G --> H[RGB Reshape]
-    H --> I[PNG + tEXt(salt,param)]
-```
+![sifrelemeadimlari](https://github.com/user-attachments/assets/93374f64-606c-43ee-addf-52b1f975e559)
+![sifrecozmeakis](https://github.com/user-attachments/assets/70f7e558-960c-467a-bf45-accab41af398)
+
 Each step is exposed as a reusable function for both CLI and Flask routes.
 
 
