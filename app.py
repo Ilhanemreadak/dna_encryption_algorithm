@@ -1,317 +1,261 @@
-from flask import Flask, request, render_template, jsonify
-from flask_cors import CORS
-from werkzeug.utils import secure_filename
-import os
+import os, time
 from datetime import datetime
 from pathlib import Path
-from PIL import Image
-from PIL import Image, PngImagePlugin
+from uuid import uuid4
 import numpy as np
-import time
-
+from PIL import Image
+from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
+from werkzeug.utils import secure_filename
 from encrypt import encrypt_image
 from decrypt import decrypt_image
 from analysis_utils import (
-    compute_and_save_histogram,
-    compute_and_save_correlation,
-    compute_psnr,
-    compute_npcr_uaci,
-    compute_entropy_rgb,
-    compute_average_rgb_neighbor_correlation
+    compute_and_save_histogram, compute_and_save_correlation,
+    compute_psnr, compute_npcr_uaci, compute_entropy_rgb
 )
+
+from config import Config                             
+from utils.logging_cfg import setup_logging, SafeRequestHandler
+from utils.validators import (allowed_file, validate_request, 
+                                validate_numeric_params)
+from utils.io_helpers import (make_dirs, get_file_from_directory, 
+                                save_image_with_metadata)
+
+logger = setup_logging()
 
 app = Flask(__name__)
 CORS(app)
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config['ANALYZE_FOLDER'] = os.path.join('static', 'analysis')
-os.makedirs(app.config['ANALYZE_FOLDER'], exist_ok=True)
-
-ALLOWED = {'png','jpg','jpeg'}
-
-def allowed_file(fn):
-    return '.' in fn and fn.rsplit('.',1)[1].lower() in ALLOWED
-
-def make_dirs(filename: str):
-    ts = datetime.now().strftime("%d_%m_%Y_%H_%M")
-    base = f"{Path(filename).stem}_{ts}"
-    base_dir = os.path.join(UPLOAD_FOLDER, base)
-    in_dir  = os.path.join(base_dir, 'in')
-    out_dir = os.path.join(base_dir, 'out')
-    os.makedirs(in_dir,  exist_ok=True)
-    os.makedirs(out_dir, exist_ok=True)
-    return in_dir, out_dir, base
+app.config['MAX_CONTENT_LENGTH'] = Config.MAX_CONTENT_LENGTH
+os.makedirs(Config.UPLOAD_FOLDER,  exist_ok=True)
+os.makedirs(Config.ANALYZE_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/encrypt', methods=['POST'])
+@validate_request(file_fields=['image']) 
 def encrypt_route():
-    start_time = time.time()
-    file = request.files.get('image')
-    dir_name = request.form.get('directory')
-    if dir_name:
-        # use existing directory
-        base = dir_name
-        in_dir = os.path.join(UPLOAD_FOLDER, base, 'in')
-        files = [f for f in os.listdir(in_dir) if allowed_file(f)]
-        if not files:
-            return jsonify({'status':'error','message':'Original file missing'}),404
-        filename = files[0]
-        input_path = os.path.join(in_dir, filename)
+    t0 = time.time()
+
+    file      = request.files.get('image')
+    directory = request.form.get('directory', '').strip()
+
+    # kaynak dosyayı al
+    if directory:
+        fname, input_path = get_file_from_directory(directory)
+        if not fname:
+            return jsonify(status='error', message='Belirtilen dizinde dosya yok'), 404
+        base     = directory
+        filename = fname
+        out_dir  = Path(Config.UPLOAD_FOLDER)/base/'out'
     else:
-        if not file or not allowed_file(file.filename):
-            return jsonify({'status':'error','message':'Invalid input'}),400
+        if not file: 
+            return jsonify(status='error', message='Dosya veya dizin gerekli'),400
         filename = secure_filename(file.filename)
         in_dir, out_dir, base = make_dirs(filename)
         input_path = os.path.join(in_dir, filename)
         file.save(input_path)
 
-    password = request.form.get('key','')
-    dna_rule = int(request.form.get('dna_rule',1))
-    x0_list = request.form.getlist('x0[]',type=float)
-    r_list = request.form.getlist('r[]',type=float)
-
-    # determine out_dir
-    if not dir_name:
-        _, out_dir, _ = make_dirs(filename)
-    out_dir = os.path.join(UPLOAD_FOLDER, base, 'out')
-    encrypted_name = f"enc_{filename}"
-    output_path = os.path.join(out_dir, encrypted_name)
+    # form parametrelerini oku + doğrula
     try:
-        encrypt_image(input_path, output_path, password, dna_rule, x0_list, r_list)
-    except Exception as e:
-        return jsonify({'status':'error','message':str(e)}),500
-    end_time = time.time()
-    duration = end_time - start_time
-    print(f"Encryption took {duration:.6f} seconds")
-    return jsonify({'status':'success','image_url':f'/static/uploads/{base}/out/{encrypted_name}','directory':base, 'duration': duration})
+        params = validate_numeric_params({
+            'dna_rule': request.form.get('dna_rule', 1),
+            'x0_list' : request.form.getlist('x0[]', type=float),
+            'r_list'  : request.form.getlist('r[]',  type=float)
+        })
+    except ValueError as e:
+        return jsonify(status='error', message=str(e)), 400
+
+    password   = request.form.get('key','')
+    output_path= os.path.join(out_dir, f"enc_{filename}")
+
+    encrypt_image(
+        input_path, output_path, password,
+        params['dna_rule'], params['x0_list'], params['r_list']
+    )
+
+    dur = round(time.time()-t0, 4)
+    logger.info(f"Encrypt: {filename} -> {output_path} ({dur}s)")
+    return jsonify(
+        status   ='success',
+        directory=base,
+        duration =dur,
+        image_url=f"/static/uploads/{base}/out/enc_{filename}"
+    )
 
 @app.route('/decrypt', methods=['POST'])
+@validate_request(file_fields=['image'])
 def decrypt_route():
-    start_time = time.time()
-    # 1) Eğer directory gelmişse, o klasörden oku
-    directory = request.form.get('directory')
+    t0 = time.time()
+    directory = request.form.get('directory', '').strip()
+
     if directory:
-        in_dir = os.path.join(UPLOAD_FOLDER, directory, 'in')
-        files = [f for f in os.listdir(in_dir) if allowed_file(f)]
-        if not files:
-            return jsonify(status='error', message='Girdi dosyası bulunamadı'), 404
-        filename = files[0]
-        input_path = os.path.join(in_dir, filename)
+        fname, input_path = get_file_from_directory(directory)
+        if not fname:
+            return jsonify(status='error', message='Belirtilen dizinde dosya yok'),404
+        base     = directory
+        filename = fname
+        out_dir  = Path(Config.UPLOAD_FOLDER)/base/'out'
     else:
-        # eskiden olduğu gibi doğrudan yüklenen blob
         file = request.files.get('image')
-        if not file or not allowed_file(file.filename):
-            return jsonify(status='error', message='Dosya gereklidir'), 400
+        if not file:
+            return jsonify(status='error', message='Dosya veya dizin gerekli'),400
         filename = secure_filename(file.filename)
-        in_dir, out_dir, directory = make_dirs(filename)
+        in_dir, out_dir, base = make_dirs(filename)
         input_path = os.path.join(in_dir, filename)
         file.save(input_path)
 
-    # 2) Çöz
-    password = request.form.get('key', '')
-    _, out_dir, _ = make_dirs(filename) if not directory else (None, os.path.join(UPLOAD_FOLDER, directory, 'out'), None)
-    output_name = f"dec_{filename}"
-    output_path = os.path.join(out_dir, output_name)
+    password   = request.form.get('key','')
+    output_path= os.path.join(out_dir, f"dec_{filename}")
+    decrypt_image(input_path, output_path, password)
 
-    try:
-        decrypt_image(input_path, output_path, password)
-    except Exception as e:
-        return jsonify(status='error', message=str(e)), 500
-
-    url = f"/static/uploads/{directory}/out/{output_name}"
-    end_time = time.time()
-    duration = end_time - start_time
-    print(f"Decryption took {duration:.6f} seconds")
-    return jsonify(status='success', image_url=url, directory=directory)
-
+    dur = round(time.time()-t0, 4)
+    logger.info(f"Decrypt: {filename} ({dur}s)")
+    return jsonify(
+        status   ='success',
+        directory=base,
+        duration =dur,
+        image_url=f"/static/uploads/{base}/out/dec_{filename}"
+    )
 
 @app.route('/crop_attack', methods=['POST'])
+@validate_request(file_fields=['image'])
 def crop_attack():
-    # 1) Parametreler
     try:
-        w = int(request.form.get('width', 0))
-        h = int(request.form.get('height', 0))
+        w = int(request.form.get('width',0))
+        h = int(request.form.get('height',0))
+        if not (0 < w <= Config.MAX_CROP_SIZE and 0 < h <= Config.MAX_CROP_SIZE):
+            raise ValueError
     except ValueError:
-        return jsonify(status='error', message='Geçersiz crop boyutları'), 400
-    if w<=0 or h<=0:
-        return jsonify(status='error', message='Geçersiz crop boyutları'), 400
+        return jsonify(status='error', message='Geçersiz crop boyutu'),400
 
-    # 2) Hangi görüntü?
-    directory = request.form.get('directory')
+    directory = request.form.get('directory','').strip()
     if directory:
-        # Önceden oluşturulan in/ klasöründeki resmi al
-        in_dir = os.path.join(UPLOAD_FOLDER, directory, 'in')
-        files = [f for f in os.listdir(in_dir) if allowed_file(f)]
-        if not files:
-            return jsonify(status='error', message='Orijinal dosya bulunamadı'), 404
-        filename = files[0]
+        fname, in_path = get_file_from_directory(directory)
+        if not fname: return jsonify(status='error', message='Yok'),404
+        base = directory
     else:
-        # Doğrudan form'dan gelen dosyayı al ve yeni bir directory oluştur
-        file = request.files.get('image')
-        if not file or not allowed_file(file.filename):
-            return jsonify(status='error', message='Dosya gereklidir'), 400
-        filename = secure_filename(file.filename)
-        in_dir, _, directory = make_dirs(filename)
-        file.save(os.path.join(in_dir, filename))
+        f = request.files.get('image')
+        if not f: return jsonify(status='error', message='Dosya?'),400
+        filename = secure_filename(f.filename)
+        in_dir, _, base = make_dirs(filename)
+        in_path = os.path.join(in_dir, filename)
+        f.save(in_path)
 
-    in_path = os.path.join(in_dir, filename)
-    img = Image.open(in_path)
-    info = img.info           # metadata (salt/params) burada
-
-    # 3) Sol üst köşeyi siyahla doldur
-    arr = np.array(img)
-    arr[0:h, 0:w, :] = 0
+    img  = Image.open(in_path); info = img.info
+    arr  = np.array(img); arr[:h,:w,:]=0
     masked = Image.fromarray(arr)
+    save_image_with_metadata(masked, in_path, info)
 
-    # 4) Metadata'yı koru
-    meta = PngImagePlugin.PngInfo()
-    if 'salt' in info:   meta.add_text('salt', info['salt'])
-    if 'params' in info: meta.add_text('params', info['params'])
-
-    # 5) Üzerine yaz
-    masked.save(in_path, pnginfo=meta)
-
-    # 6) URL döndür
-    url = f"/static/uploads/{directory}/in/{filename}"
-    return jsonify(status='success', directory=directory, cropped_url=url)
+    logger.info(f"Crop attack {w}x{h} on {in_path}")
+    return jsonify(status='success', directory=base,
+                   cropped_url=f"/static/uploads/{base}/in/{Path(in_path).name}")
 
 @app.route('/noise_attack', methods=['POST'])
+@validate_request(file_fields=['image'])
 def noise_attack():
-    # 1) Parametreleri al
-    noise_type = request.form.get('type')
-    strength   = float(request.form.get('strength', 0))
-    if noise_type not in {'gaussian','salt_pepper'} or strength <= 0:
-        return jsonify(status='error', message='Geçersiz noise parametreleri'),400
+    ntype = request.form.get('type','').lower()
+    try:
+        strength = float(request.form.get('strength',0))
+        if ntype not in {'gaussian','salt_pepper'}:
+            raise ValueError('tip')
+        if not (Config.MIN_NOISE_STRENGTH<=strength<=Config.MAX_NOISE_STRENGTH):
+            raise ValueError('sev')
+    except ValueError:
+        return jsonify(status='error', message='Geçersiz noise param.'),400
 
-    # 2) Hangi görsel?
-    directory = request.form.get('directory')
+    directory = request.form.get('directory','').strip()
     if directory:
-        in_dir = os.path.join(UPLOAD_FOLDER, directory, 'in')
-        files = [f for f in os.listdir(in_dir) if allowed_file(f)]
-        if not files:
-            return jsonify(status='error', message='Orijinal dosya bulunamadı'),404
-        filename = files[0]
+        fname,in_path = get_file_from_directory(directory)
+        if not fname: return jsonify(status='error', message='Yok'),404
+        base=directory
     else:
-        file = request.files.get('image')
-        if not file or not allowed_file(file.filename):
-            return jsonify(status='error', message='Dosya gereklidir'),400
-        filename = secure_filename(file.filename)
-        in_dir, _, directory = make_dirs(filename)
-        file.save(os.path.join(in_dir, filename))
+        f=request.files.get('image')
+        if not f: return jsonify(status='error', message='Dosya?'),400
+        filename=secure_filename(f.filename)
+        in_dir, _, base = make_dirs(filename)
+        in_path=os.path.join(in_dir,filename)
+        f.save(in_path)
 
-    in_path = os.path.join(in_dir, filename)
-    img = Image.open(in_path).convert('RGB')
-    info = img.info  # salt/params metadata burada
+    img = Image.open(in_path).convert('RGB'); info=img.info
+    arr = np.array(img).astype(np.float32)/255.0
+    if ntype=='gaussian':
+        arr = np.clip(arr+np.random.normal(0,strength**0.5,arr.shape),0,1)
+    else:   # salt & pepper
+        mask=np.random.rand(*arr.shape[:2])
+        arr[mask<strength/2]=0; arr[mask>1-strength/2]=1
+    out = Image.fromarray((arr*255).astype(np.uint8))
+    save_image_with_metadata(out, in_path, info)
 
-    arr = np.array(img).astype(np.float32) / 255.0
-
-    # 3) Noise uygulama
-    if noise_type == 'gaussian':
-        mean = 0.0
-        var  = strength
-        gauss = np.random.normal(mean, var**0.5, arr.shape)
-        arr_noised = np.clip(arr + gauss, 0.0, 1.0)
-    else:  # salt_pepper
-        prob = strength
-        mask = np.random.rand(*arr.shape[:2])
-        sp_arr = arr.copy()
-        sp_arr[mask < (prob/2)] = 0.0
-        sp_arr[mask > 1 - (prob/2)] = 1.0
-        arr_noised = sp_arr
-
-    noised = (arr_noised * 255).astype(np.uint8)
-    out_img = Image.fromarray(noised)
-
-    # 4) Metadata’yı koru
-    pnginfo = PngImagePlugin.PngInfo()
-    if 'salt' in info:   pnginfo.add_text('salt', info['salt'])
-    if 'params' in info: pnginfo.add_text('params', info['params'])
-
-    # 5) Üzerine yaz
-    save_path = os.path.join(in_dir, filename)
-    out_img.save(save_path, pnginfo=pnginfo)
-
-    url = f"/static/uploads/{directory}/in/{filename}"
-    return jsonify(status='success', directory=directory, noised_url=url)
+    logger.info(f"Noise {ntype}-{strength} on {in_path}")
+    return jsonify(status='success', directory=base,
+                   noised_url=f"/static/uploads/{base}/in/{Path(in_path).name}")
 
 @app.route('/analyze', methods=['POST'])
+@validate_request(file_fields=['input','output'])
 def analyze():
-    input_file = request.files.get('input')
-    output_file = request.files.get('output')
+    inp = request.files.get('input'); outp = request.files.get('output')
+    if not inp and not outp:
+        return jsonify(status='error', message='En az bir dosya gerek'),400
 
-    if not input_file and not output_file:
-        return jsonify({'status': 'error', 'message': 'Görsel dosyası yüklenmedi'}), 400
+    ts = datetime.now().strftime('%d_%m_%Y_%H_%M_%S')
+    bname = secure_filename((inp or outp).filename).rsplit('.',1)[0]
+    base  = Path(Config.ANALYZE_FOLDER)/f"{bname}_{ts}"
+    in_dir, out_dir = base/'in', base/'out'
+    in_dir.mkdir(parents=True); out_dir.mkdir(parents=True)
 
-    # klasör adı
-    timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M")
-    base_name = secure_filename((input_file or output_file).filename).rsplit('.', 1)[0]
-    folder_name = f"{base_name}_{timestamp}"
+    inp_path = out_path = None
+    if inp:
+        inp_path = in_dir/'input.png'; inp.save(inp_path)
+    if outp:
+        out_path = out_dir/'output.png'; outp.save(out_path)
 
-    base_path = os.path.join(app.root_path, app.config['ANALYZE_FOLDER'], folder_name)
-    in_dir = os.path.join(base_path, "in")
-    out_dir = os.path.join(base_path, "out")
-    os.makedirs(in_dir, exist_ok=True)
-    os.makedirs(out_dir, exist_ok=True)
+    def _single(p:Path, pref:str):
+        stub=uuid4().hex[:6]
+        h=out_dir/f"hist_{pref}_{stub}.png"
+        c=out_dir/f"corr_{pref}_{stub}.png"
+        compute_and_save_histogram(p,h)
+        compute_and_save_correlation(p,c)
+        return str(h).replace(app.root_path,''), str(c).replace(app.root_path,''), compute_entropy_rgb(p)
 
-    # görsellerin yolu
-    input_path, output_path = None, None
-
-    if input_file:
-        input_path = os.path.join(in_dir, 'input.png')
-        input_file.save(input_path)
-
-    if output_file:
-        output_path = os.path.join(out_dir, 'output.png')
-        output_file.save(output_path)
-
-    # histogram + corr her zaman çıktı dosyası üzerinden hesaplanacak
-    analysis_target_path = output_path if output_path else input_path
-    filename_wo_ext = os.path.splitext(os.path.basename(analysis_target_path))[0]
-
-    hist_path = os.path.join(out_dir, f"hist_{filename_wo_ext}.png")
-    corr_path = os.path.join(out_dir, f"corr_{filename_wo_ext}.png")
-    compute_and_save_histogram(analysis_target_path, hist_path)
-    compute_and_save_correlation(analysis_target_path, corr_path)
-    entropy = compute_entropy_rgb(analysis_target_path)
-    correlation = compute_average_rgb_neighbor_correlation(analysis_target_path)
-
-    # PSNR hesapla (sadece ikisi varsa)
-    if input_path and output_path:
-        psnr = compute_psnr(input_path, output_path)
-        npcr, uaci = compute_npcr_uaci(input_path, output_path)
+    res={'status':'success'}
+    if not out_path:
+        h,c,e=_single(inp_path,'in')
+        res.update(hist_urls=[h], corr_urls=[c], entropies=[e])
     else:
-        psnr = "∞"
-        npcr, uaci = "-", "-"
+        h1,c1,e1=_single(inp_path,'in'); h2,c2,e2=_single(out_path,'out')
+        psnr=compute_psnr(inp_path,out_path); npcr,uaci=compute_npcr_uaci(inp_path,out_path)
+        res.update(hist_urls=[h1,h2], corr_urls=[c1,c2], entropies=[e1,e2],
+                   psnr=round(psnr,4), npcr=round(npcr,4), uaci=round(uaci,4))
+    return jsonify(res)
 
-    return jsonify({
-        'status': 'success',
-        'directory': folder_name,
-        'hist_url': f'/static/analysis/{folder_name}/out/hist_{filename_wo_ext}.png',
-        'corr_url': f'/static/analysis/{folder_name}/out/corr_{filename_wo_ext}.png',
-        'psnr': psnr,
-        'npcr': npcr,
-        'uaci': uaci,
-        'entropy': entropy,
-        'correlation': correlation
-    })
+@app.route('/example_images')
+def example_images():
+    if not Config.EXAMPLES_FOLDER.exists():
+        return jsonify(status='error', message='Klasör yok'),404
+    files = sorted([f for f in Config.EXAMPLES_FOLDER.iterdir() if allowed_file(f.name)])
+    urls  = [f"/static/examples/{f.name}" for f in files]
+    return jsonify(status='success', images=urls, count=len(urls))
 
-@app.route('/example_images', methods=['GET'])
-def get_example_images():
-    examples_path = os.path.join(app.root_path, 'static', 'examples')
-    if not os.path.exists(examples_path):
-        return jsonify({'status': 'error', 'message': 'Klasör bulunamadı'}), 404
+@app.route('/health')
+def health():
+    return jsonify(status='healthy', time=datetime.now().isoformat())
 
-    files = [
-        f for f in os.listdir(examples_path)
-        if f.lower().endswith(('.png', '.jpg', '.jpeg'))
-    ]
-    urls = [f'/static/examples/{f}' for f in files]
+@app.errorhandler(413)
+def file_too_large(_): return jsonify(
+        status='error',
+        message=f'Max {Config.MAX_CONTENT_LENGTH//(1024*1024)} MB'
+    ),413
 
-    return jsonify({'status': 'success', 'images': urls})
+@app.errorhandler(404)
+def not_found(_): return jsonify(status='error', message='Sayfa bulunamadı'),404
 
+@app.errorhandler(500)
+def internal(err):
+    logger.error(f"Internal error: {err}", exc_info=True)
+    return jsonify(status='error', message='Sunucu hatası'),500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    logger.info("Flask app starting")
+    app.run(host='0.0.0.0', port=5000, debug=True, request_handler=SafeRequestHandler)

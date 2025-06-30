@@ -1,0 +1,31 @@
+# --- Temel Bilimsel ve Görüntü İşleme Kütüphaneleri ---
+numpy>=1.23
+pillow>=10.0
+scipy>=1.10
+
+# --- Web Arayüzü ve API ---
+flask>=2.3
+flask-cors>=4.0
+werkzeug>=2.3
+
+# --- Hızlandırma ve Derleme ---
+cython>=3.0
+wheel>=0.41
+
+# --- Kriptografi ve Güvenlik ---
+cryptography>=42.0
+
+# --- Geliştirme ve Test ---
+pytest>=7.0
+pytest-benchmark>=4.0
+tqdm>=4.65
+
+# --- Analiz ve Görselleştirme ---
+matplotlib>=3.7
+
+# --- JSON ve Metadata Yönetimi ---
+# (json modülü standart kütüphane, ek paket gerekmez)
+
+# --- Notlar ---
+# pillow-simd ve numba gibi opsiyonel hızlandırıcılar isteğe bağlıdır.
+# Cython modülleri için pyproject.toml veya setup.cfg gereklidir.

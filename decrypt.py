@@ -1,6 +1,6 @@
 import numpy as np
 import json
-from utils import (
+from utils.misc_utils import (
     load_image, save_image, flatten_rgb, reshape_rgb,
     derive_key_from_password
 )

@@ -5,3 +5,14 @@
 *.p12
 *.jpeg
 *.jpg
+
+# static/uploads ve static/analysis altındaki tüm dosya ve klasörler hariç, ana klasörler kalsın
+static/uploads/*
+static/analysis/*
+
+# uploads ve analysis klasörlerinin kendisi silinmesin
+!static/uploads/
+!static/analysis/
+
+**/__pycache__/
+__pycache__/

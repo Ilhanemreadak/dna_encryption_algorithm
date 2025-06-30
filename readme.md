@@ -57,22 +57,24 @@ Tüm adımlar modüler fonksiyonlar hâlinde tasarlandığından hem CLI hem Fla
 ├── app.py
 ├── encrypt.py          # Ana şifreleyici/CLI arayüzü
 ├── decrypt.py
-├── utils.py
 ├── analysis_utils.py
 ├── requirements.txt
+├── utils/
+│   ├── __init__.py
+│   ├── misc_utils.py
+│   ├── logging_cfg.py
+│   └── ...             # Diğer yardımcı modüller
 ├── src/
 │   └── accelerated/
 │       ├── dna_codec_cy.pyx
 │       ├── logistic_cy.pyx
 │       └── chaos_utils_cy.pyx
-├── templates/          # Jinja2 HTML şablonları
+├── templates/          # HTML şablonları
 └── static/
     ├── uploads/        # Zamana göre oluşturulan klasörler
     ├── analysis/       # Histogram & korelasyon çıktıları
     └── examples/       # Demo görseller
 ```
-`static/uploads/` çalışma anında otomatik oluşur ve `.gitignore` içindedir.
-
 
 ### Kurulum
 ```bash
@@ -106,7 +108,7 @@ flask run    # http://localhost:5000 adresinde hizmet verir
 |--------|-------------|----------|
 | PSNR   | 49,2 dB     | Şifreli ↔ çözülen görüntü arasındaki kalite |
 | NPCR   | 99,65 %     | Bit‑düzeyi değişim oranı |
-| UACI   | 33,27 %     | Ortalama yoğun değişim |
+| UACI   | 49,99 %     | Ortalama yoğun değişim |
 | Entropi| 7,999 bit   | Rastgelelik üst sınırına yakın |
 
 `analysis_utils.py` veya `/analyze` API uç noktası ile bu metrikler otomatik hesaplanabilir.
@@ -212,7 +214,7 @@ flask run   # open http://localhost:5000
 |--------|--------------|------|
 | PSNR   | 49.2 dB      | High fidelity after round‑trip |
 | NPCR   | 99.65 %      | Optimal pixel change rate |
-| UACI   | 33.27 %      | Uniform average intensity change |
+| UACI   | 49.99 %      | Uniform average intensity change |
 | Entropy| 7.999 bit    | Near the theoretical maximum |
 
 `analysis_utils.py` or the `/analyze` API endpoint can generate these metrics automatically.

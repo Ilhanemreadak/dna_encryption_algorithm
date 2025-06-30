@@ -1,0 +1,401 @@
+2025-07-01 00:00:25,745 - __main__ - INFO - Starting Flask application
+2025-07-01 00:00:25,787 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 00:00:25,787 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 00:00:25,813 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:00:29,542 - __main__ - INFO - Starting Flask application
+2025-07-01 00:00:29,559 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:00:29,570 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:01:47,739 - werkzeug - ERROR - 192.168.1.26 - - [01/Jul/2025 00:01:47] code 400, message Bad request syntax ('\x16\x03\x01\x06à\x01\x00\x06Ü\x03\x03eÏ§')
+2025-07-01 00:01:47,742 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:01:47] "[31m[1m\x16\x03\x01\x06à\x01\x00\x06Ü\x03\x03eÏ§[0m" 400 -
+2025-07-01 00:01:47,763 - werkzeug - ERROR - 192.168.1.26 - - [01/Jul/2025 00:01:47] code 400, message Bad request version ('\x00\x02\x01\x00\x00-\x00\x02\x01\x01\x00\x17\x00\x00\x00')
+2025-07-01 00:01:47,799 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\logging\\__init__.py', reloading
+2025-07-01 00:01:47,854 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1254.py', reloading
+2025-07-01 00:01:47,855 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\http\\server.py', reloading
+2025-07-01 00:01:47,856 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\werkzeug\\_internal.py', reloading
+2025-07-01 00:01:47,857 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\.vscode\\extensions\\ms-python.debugpy-2025.8.0-win32-x64\\bundled\\libs\\debugpy\\_vendored\\pydevd\\_pydev_bundle\\pydev_monkey.py', reloading
+2025-07-01 00:02:49,753 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:02:53,635 - __main__ - INFO - Starting Flask application
+2025-07-01 00:02:53,649 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:02:53,656 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:02:53,711 - werkzeug - ERROR - 192.168.1.26 - - [01/Jul/2025 00:02:53] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x06')
+2025-07-01 00:02:53,740 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:02:53] "GET / HTTP/1.1" 200 -
+2025-07-01 00:03:06,564 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:06] "GET / HTTP/1.1" 200 -
+2025-07-01 00:03:06,659 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:06] "GET / HTTP/1.1" 200 -
+2025-07-01 00:03:07,117 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-01 00:03:39,949 - __main__ - INFO - Created directories for WIN_20211116_16_45_41_Pro.jpg: WIN_20211116_16_45_41_Pro_01_07_2025_00_03_39
+2025-07-01 00:03:43,691 - __main__ - INFO - Encryption completed in 18.1317 seconds for WIN_20211116_16_45_41_Pro.jpg
+2025-07-01 00:03:43,727 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:43] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:03:43,963 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:43] "GET /static/uploads/WIN_20211116_16_45_41_Pro_01_07_2025_00_03_39/out/enc_WIN_20211116_16_45_41_Pro.jpg HTTP/1.1" 200 -
+2025-07-01 00:03:48,066 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:48] "GET / HTTP/1.1" 200 -
+2025-07-01 00:03:50,898 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:50] "[36mGET /static/uploads/WIN_20211116_16_45_41_Pro_01_07_2025_00_03_39/out/enc_WIN_20211116_16_45_41_Pro.jpg HTTP/1.1[0m" 304 -
+2025-07-01 00:03:53,263 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:03:53] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:05:54,075 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:54] "GET / HTTP/1.1" 200 -
+2025-07-01 00:05:54,414 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:54] "GET / HTTP/1.1" 200 -
+2025-07-01 00:05:58,656 - __main__ - INFO - Found 12 example images
+2025-07-01 00:05:58,658 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:05:58,704 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,707 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,715 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,728 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,730 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,733 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,748 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,755 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,768 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,768 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,775 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:05:58,780 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:05:58] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:06:00,032 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:00] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:06:03,155 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_06_03
+2025-07-01 00:06:04,065 - __main__ - INFO - Encryption completed in 0.9130 seconds for Lenna-512.png
+2025-07-01 00:06:04,072 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:04] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:06:04,090 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:04] "GET /static/uploads/Lenna-512_01_07_2025_00_06_03/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 00:06:07,219 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:07] "GET / HTTP/1.1" 200 -
+2025-07-01 00:06:09,290 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:09] "[36mGET /static/uploads/Lenna-512_01_07_2025_00_06_03/out/enc_Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:06:09,843 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:09] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:06:33,933 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:06:33] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:07:48,840 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\app.py', reloading
+2025-07-01 00:07:48,840 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\app.py', reloading
+2025-07-01 00:07:53,006 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:07:56,168 - __main__ - INFO - Starting Flask application
+2025-07-01 00:09:31,348 - __main__ - INFO - Starting Flask application
+2025-07-01 00:09:31,372 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 00:09:31,373 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 00:09:31,391 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:09:34,430 - __main__ - INFO - Starting Flask application
+2025-07-01 00:09:34,438 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:09:34,448 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:09:35,392 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:35] "GET / HTTP/1.1" 200 -
+2025-07-01 00:09:35,454 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:35] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:09:35,825 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:35] "GET / HTTP/1.1" 200 -
+2025-07-01 00:09:36,661 - __main__ - INFO - Found 12 example images
+2025-07-01 00:09:36,662 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:36] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:09:37,161 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,170 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,186 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,192 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,208 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,217 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,227 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,241 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,260 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,269 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,273 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:37,272 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:37] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:38,454 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:38] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:41,677 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_09_41
+2025-07-01 00:09:42,613 - __main__ - INFO - Encryption completed in 0.9389 seconds for Lenna-512.png
+2025-07-01 00:09:42,620 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:42] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:09:42,638 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:42] "GET /static/uploads/Lenna-512_01_07_2025_00_09_41/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 00:09:44,104 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:44] "GET / HTTP/1.1" 200 -
+2025-07-01 00:09:45,839 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:45] "[36mGET /static/uploads/Lenna-512_01_07_2025_00_09_41/out/enc_Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:09:46,509 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:09:46] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:10:25,562 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:10:25] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:10:33,750 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:10:33] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:11:15,775 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:11:15] "[31m[1mPOST /analyze HTTP/1.1[0m" 400 -
+2025-07-01 00:15:56,072 - __main__ - INFO - Starting Flask application
+2025-07-01 00:15:56,104 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 00:15:56,104 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 00:15:56,126 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:16:00,080 - __main__ - INFO - Starting Flask application
+2025-07-01 00:16:00,094 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:16:00,099 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:16:00,244 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:00] "GET / HTTP/1.1" 200 -
+2025-07-01 00:16:00,558 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:00] "GET / HTTP/1.1" 200 -
+2025-07-01 00:16:02,155 - __main__ - INFO - Found 12 example images
+2025-07-01 00:16:02,155 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:16:02,704 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,711 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,717 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,725 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,730 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,741 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,750 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,751 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,755 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,769 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,773 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:02,775 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:02] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:03,660 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:03] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:16:11,523 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_16_11
+2025-07-01 00:16:12,740 - __main__ - INFO - Encryption completed in 1.2329 seconds for Lenna-512.png
+2025-07-01 00:16:12,749 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:12] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:16:12,774 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:12] "GET /static/uploads/Lenna-512_01_07_2025_00_16_11/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 00:16:21,293 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:21] "GET / HTTP/1.1" 200 -
+2025-07-01 00:16:27,727 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:16:27] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:17:31,034 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:31] "GET / HTTP/1.1" 200 -
+2025-07-01 00:17:31,122 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:31] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:17:31,424 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:31] "GET / HTTP/1.1" 200 -
+2025-07-01 00:17:34,713 - __main__ - INFO - Found 12 example images
+2025-07-01 00:17:34,715 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:17:34,802 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,803 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,819 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,821 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,827 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,840 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,859 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,869 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,882 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,896 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,904 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:34,910 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:34] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:36,074 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:36] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:40,020 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_17_40
+2025-07-01 00:17:41,079 - __main__ - INFO - Encryption completed in 1.0674 seconds for Lenna-512.png
+2025-07-01 00:17:41,088 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:41] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:17:41,109 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:41] "GET /static/uploads/Lenna-512_01_07_2025_00_17_40/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 00:17:48,475 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:48] "GET / HTTP/1.1" 200 -
+2025-07-01 00:17:50,931 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:50] "[36mGET /static/uploads/Lenna-512_01_07_2025_00_17_40/out/enc_Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:17:54,805 - __main__ - ERROR - Error in analyze: type str doesn't define __round__ method
+Traceback (most recent call last):
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 74, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 108, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 621, in analyze
+    'psnr': round(psnr, 4),
+            ^^^^^^^^^^^^^^
+TypeError: type str doesn't define __round__ method
+2025-07-01 00:17:54,808 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:17:54] "[35m[1mPOST /analyze HTTP/1.1[0m" 500 -
+2025-07-01 00:19:54,272 - __main__ - ERROR - Error in analyze: type str doesn't define __round__ method
+Traceback (most recent call last):
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 74, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 108, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 621, in analyze
+    'psnr': round(psnr, 4),
+            ^^^^^^^^^^^^^^
+TypeError: type str doesn't define __round__ method
+2025-07-01 00:19:54,277 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:19:54] "[35m[1mPOST /analyze HTTP/1.1[0m" 500 -
+2025-07-01 00:20:59,642 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\analysis_utils.py', reloading
+2025-07-01 00:20:59,643 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\analysis_utils.py', reloading
+2025-07-01 00:20:59,644 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\analysis_utils.py', reloading
+2025-07-01 00:21:03,837 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:21:07,915 - __main__ - INFO - Starting Flask application
+2025-07-01 00:21:07,929 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:21:07,941 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:21:34,938 - __main__ - INFO - Comparative analysis completed for image.png
+2025-07-01 00:21:38,749 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:21:38] "POST /analyze HTTP/1.1" 200 -
+2025-07-01 00:21:38,974 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:21:38] "GET /static/analysis/image_01_07_2025_00_21_22/out/hist_input_02f06c.png HTTP/1.1" 200 -
+2025-07-01 00:21:38,990 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:21:38] "GET /static/analysis/image_01_07_2025_00_21_22/out/corr_output_ffbc00.png HTTP/1.1" 200 -
+2025-07-01 00:21:39,006 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:21:39] "GET /static/analysis/image_01_07_2025_00_21_22/out/corr_input_02f06c.png HTTP/1.1" 200 -
+2025-07-01 00:21:39,007 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:21:39] "GET /static/analysis/image_01_07_2025_00_21_22/out/hist_output_ffbc00.png HTTP/1.1" 200 -
+2025-07-01 00:26:46,458 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:26:46] "GET / HTTP/1.1" 200 -
+2025-07-01 00:26:46,524 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:26:46] "GET / HTTP/1.1" 200 -
+2025-07-01 00:26:47,512 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:26:47] "GET / HTTP/1.1" 200 -
+2025-07-01 00:26:47,567 - werkzeug - INFO - 192.168.1.26 - - [01/Jul/2025 00:26:47] "GET / HTTP/1.1" 200 -
+2025-07-01 00:38:52,790 - __main__ - INFO - Starting Flask application
+2025-07-01 00:38:52,826 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 00:38:52,827 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 00:38:52,849 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:38:56,389 - __main__ - INFO - Starting Flask application
+2025-07-01 00:38:56,402 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:38:56,412 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:39:03,576 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:03] "GET / HTTP/1.1" 200 -
+2025-07-01 00:39:03,664 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:03] "[33mGET /templates/style.css HTTP/1.1[0m" 404 -
+2025-07-01 00:39:03,668 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:03] "[33mGET /templates/scripts.js HTTP/1.1[0m" 404 -
+2025-07-01 00:39:03,924 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:03] "GET / HTTP/1.1" 200 -
+2025-07-01 00:39:08,875 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:08] "[33mGET /templates/style.css HTTP/1.1[0m" 404 -
+2025-07-01 00:39:08,897 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:39:08] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:42:08,325 - __main__ - INFO - Starting Flask application
+2025-07-01 00:42:08,373 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 00:42:08,374 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 00:42:08,396 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:42:13,347 - __main__ - INFO - Starting Flask application
+2025-07-01 00:42:13,390 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:42:13,413 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:42:16,378 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:16] "GET / HTTP/1.1" 200 -
+2025-07-01 00:42:16,447 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:16] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-01 00:42:16,641 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:16] "GET /static/scripts.js HTTP/1.1" 200 -
+2025-07-01 00:42:16,641 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:16] "GET /static/style.css HTTP/1.1" 200 -
+2025-07-01 00:42:16,798 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:16] "GET / HTTP/1.1" 200 -
+2025-07-01 00:42:24,801 - __main__ - INFO - Found 12 example images
+2025-07-01 00:42:24,802 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:42:24,819 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,825 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,828 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,840 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,845 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,856 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,862 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,872 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,876 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,882 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,890 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:24,897 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:24] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:25,680 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:25] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:27,499 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_42_27
+2025-07-01 00:42:28,584 - __main__ - INFO - Encryption completed in 1.0942 seconds for Lenna-512.png
+2025-07-01 00:42:28,592 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:28] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 00:42:28,615 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:28] "GET /static/uploads/Lenna-512_01_07_2025_00_42_27/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 00:42:29,804 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:29] "GET / HTTP/1.1" 200 -
+2025-07-01 00:42:31,443 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:31] "[36mGET /static/uploads/Lenna-512_01_07_2025_00_42_27/out/enc_Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:42:44,610 - __main__ - INFO - Comparative analysis completed for image.png
+2025-07-01 00:42:44,619 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:44] "POST /analyze HTTP/1.1" 200 -
+2025-07-01 00:42:44,662 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:44] "GET /static/analysis/image_01_07_2025_00_42_36/out/hist_input_1c2427.png HTTP/1.1" 200 -
+2025-07-01 00:42:44,666 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:44] "GET /static/analysis/image_01_07_2025_00_42_36/out/hist_output_d1cb89.png HTTP/1.1" 200 -
+2025-07-01 00:42:44,667 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:44] "GET /static/analysis/image_01_07_2025_00_42_36/out/corr_input_1c2427.png HTTP/1.1" 200 -
+2025-07-01 00:42:44,689 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:44] "GET /static/analysis/image_01_07_2025_00_42_36/out/corr_output_d1cb89.png HTTP/1.1" 200 -
+2025-07-01 00:42:59,668 - __main__ - INFO - Created directories for Lenna-512.png: Lenna-512_01_07_2025_00_42_59
+2025-07-01 00:42:59,733 - __main__ - ERROR - Error in decrypt_route: Salt veya metadata eksik.
+Traceback (most recent call last):
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 74, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 108, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\app.py", line 351, in decrypt_route
+    decrypt_image(input_path, output_path, password)
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\decrypt.py", line 76, in decrypt_image
+    raise e
+  File "c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\decrypt.py", line 37, in decrypt_image
+    raise ValueError("Salt veya metadata eksik.")
+ValueError: Salt veya metadata eksik.
+2025-07-01 00:42:59,751 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\decrypt.py', reloading
+2025-07-01 00:42:59,753 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:42:59] "[35m[1mPOST /decrypt HTTP/1.1[0m" 500 -
+2025-07-01 00:43:35,643 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 00:43:38,851 - __main__ - INFO - Starting Flask application
+2025-07-01 00:43:38,854 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 00:43:38,863 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 00:43:38,904 - __main__ - INFO - Found 12 example images
+2025-07-01 00:43:38,912 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:43:38] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 00:43:39,008 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:43:39] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:43:43,406 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:43:43] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 00:43:48,493 - __main__ - INFO - Created directories for Lenna_enc-512.png: Lenna_enc-512_01_07_2025_00_43_48
+2025-07-01 00:43:49,481 - __main__ - INFO - Decryption completed in 0.9915 seconds for Lenna_enc-512.png
+2025-07-01 00:43:49,489 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:43:49] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 00:43:49,509 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 00:43:49] "GET /static/uploads/Lenna_enc-512_01_07_2025_00_43_48/out/dec_Lenna_enc-512.png HTTP/1.1" 200 -
+2025-07-01 00:44:56,829 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\encrypt.py', reloading
+2025-07-01 00:45:02,310 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 01:16:37,573 - app - INFO - Flask app starting
+2025-07-01 01:16:37,600 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.22:5000
+2025-07-01 01:16:37,600 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-01 01:16:37,615 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 01:16:40,636 - app - INFO - Flask app starting
+2025-07-01 01:16:40,636 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 01:16:40,660 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 01:16:42,794 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:42] "GET / HTTP/1.1" 200 -
+2025-07-01 01:16:43,024 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:43] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-07-01 01:16:43,032 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-01 01:16:43,159 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:43] "GET / HTTP/1.1" 200 -
+2025-07-01 01:16:45,024 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 01:16:45,045 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,057 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,062 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,065 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,090 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,090 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,103 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,108 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,113 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,139 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,140 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:45,149 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:45] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:47,097 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:47] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:49,783 - app - INFO - Encrypt: Lenna-512.png -> c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\static\uploads\Lenna-512_01_07_2025_01_16_48\out\enc_Lenna-512.png (1.0079s)
+2025-07-01 01:16:49,792 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:49] "POST /encrypt HTTP/1.1" 200 -
+2025-07-01 01:16:49,811 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:49] "GET /static/uploads/Lenna-512_01_07_2025_01_16_48/out/enc_Lenna-512.png HTTP/1.1" 200 -
+2025-07-01 01:16:51,389 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:51] "GET / HTTP/1.1" 200 -
+2025-07-01 01:16:53,281 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:53] "[36mGET /static/uploads/Lenna-512_01_07_2025_01_16_48/out/enc_Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:16:56,383 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:56] "POST /analyze HTTP/1.1" 200 -
+2025-07-01 01:16:56,407 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:56] "GET /static/analysis/image_01_07_2025_01_16_53/out/corr_in_c324a0.png HTTP/1.1" 200 -
+2025-07-01 01:16:56,407 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:56] "GET /static/analysis/image_01_07_2025_01_16_53/out/hist_in_c324a0.png HTTP/1.1" 200 -
+2025-07-01 01:16:56,412 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:56] "GET /static/analysis/image_01_07_2025_01_16_53/out/hist_out_97f4f8.png HTTP/1.1" 200 -
+2025-07-01 01:16:56,413 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:56] "GET /static/analysis/image_01_07_2025_01_16_53/out/corr_out_97f4f8.png HTTP/1.1" 200 -
+2025-07-01 01:16:59,199 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:59] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 01:16:59,235 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:16:59] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:17:02,358 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:17:02] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:17:11,946 - app - INFO - Decrypt: boat_enc-1024.png (4.332s)
+2025-07-01 01:17:11,985 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:17:11] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 01:17:12,010 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:17:12] "GET /static/uploads/boat_enc-1024_01_07_2025_01_17_07/out/dec_boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:17:18,615 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:17:18] "[35m[1mPOST /noise_attack HTTP/1.1[0m" 500 -
+2025-07-01 01:18:07,425 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:18:07,425 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:18:07,425 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:18:12,606 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 01:18:15,928 - app - INFO - Flask app starting
+2025-07-01 01:18:15,937 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 01:18:15,948 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 01:19:13,099 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:19:13,099 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:19:13,100 - werkzeug - INFO -  * Detected change in 'c:\\Users\\adaki\\OneDrive\\Masaüstü\\bitirme\\Project\\config.py', reloading
+2025-07-01 01:19:16,281 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-01 01:19:19,301 - app - INFO - Flask app starting
+2025-07-01 01:19:19,307 - werkzeug - WARNING -  * Debugger is active!
+2025-07-01 01:19:19,319 - werkzeug - INFO -  * Debugger PIN: 129-664-416
+2025-07-01 01:19:21,279 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:21] "GET / HTTP/1.1" 200 -
+2025-07-01 01:19:21,475 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:21] "GET / HTTP/1.1" 200 -
+2025-07-01 01:19:21,632 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-01 01:19:21,637 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:21] "[36mGET /static/scripts.js HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,055 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 01:19:23,071 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/Baboon-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,078 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/Baboon_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,080 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/boat-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,083 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,093 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/btu-225.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,107 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,109 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/btu_enc-225.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,118 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/cameraman_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,129 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/Lenna-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,144 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/pepper-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,156 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/Lenna_enc-512.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:23,161 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:23] "[36mGET /static/examples/pepper_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:25,389 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:25] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:19:32,288 - app - INFO - Decrypt: boat_enc-1024.png (4.3765s)
+2025-07-01 01:19:32,317 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:32] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 01:19:32,344 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:32] "GET /static/uploads/boat_enc-1024_01_07_2025_01_19_27/out/dec_boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:19:42,118 - app - INFO - Decrypt: boat_enc-1024.png (4.0937s)
+2025-07-01 01:19:42,142 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:42] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 01:19:42,165 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:42] "GET /static/uploads/boat_enc-1024_01_07_2025_01_19_38/out/dec_boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:19:47,594 - app - INFO - Noise gaussian-0.01 on c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\static\uploads\boat_enc-1024_01_07_2025_01_19_47\in\boat_enc-1024.png
+2025-07-01 01:19:47,597 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:47] "POST /noise_attack HTTP/1.1" 200 -
+2025-07-01 01:19:47,625 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:47] "GET /static/uploads/boat_enc-1024_01_07_2025_01_19_47/in/boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:19:51,947 - app - INFO - Decrypt: boat_enc-1024.png (4.3322s)
+2025-07-01 01:19:51,973 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:51] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 01:19:51,998 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:19:51] "GET /static/uploads/boat_enc-1024_01_07_2025_01_19_47/out/dec_boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:20:01,763 - app - INFO - Crop attack 512x512 on c:\Users\adaki\OneDrive\Masaüstü\bitirme\Project\static\uploads\boat_enc-1024_01_07_2025_01_20_01\in\boat_enc-1024.png
+2025-07-01 01:20:01,765 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:01] "POST /crop_attack HTTP/1.1" 200 -
+2025-07-01 01:20:01,793 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:01] "GET /static/uploads/boat_enc-1024_01_07_2025_01_20_01/in/boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:20:05,878 - app - INFO - Decrypt: boat_enc-1024.png (4.0953s)
+2025-07-01 01:20:05,899 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:05] "POST /decrypt HTTP/1.1" 200 -
+2025-07-01 01:20:05,915 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:05] "GET /static/uploads/boat_enc-1024_01_07_2025_01_20_01/out/dec_boat_enc-1024.png HTTP/1.1" 200 -
+2025-07-01 01:20:11,466 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:11] "GET / HTTP/1.1" 200 -
+2025-07-01 01:20:12,647 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:12] "[36mGET /static/uploads/boat_enc-1024_01_07_2025_01_20_01/in/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:20:13,832 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:13] "[36mGET /static/uploads/boat_enc-1024_01_07_2025_01_20_01/out/dec_boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:20:21,069 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:21] "POST /analyze HTTP/1.1" 200 -
+2025-07-01 01:20:21,092 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:21] "GET /static/analysis/boat_enc-1024_01_07_2025_01_20_14/out/corr_in_975f2d.png HTTP/1.1" 200 -
+2025-07-01 01:20:21,092 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:21] "GET /static/analysis/boat_enc-1024_01_07_2025_01_20_14/out/hist_in_975f2d.png HTTP/1.1" 200 -
+2025-07-01 01:20:21,095 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:21] "GET /static/analysis/boat_enc-1024_01_07_2025_01_20_14/out/hist_out_ee0922.png HTTP/1.1" 200 -
+2025-07-01 01:20:21,097 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:21] "GET /static/analysis/boat_enc-1024_01_07_2025_01_20_14/out/corr_out_ee0922.png HTTP/1.1" 200 -
+2025-07-01 01:20:42,101 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:42] "GET /example_images HTTP/1.1" 200 -
+2025-07-01 01:20:42,131 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:42] "[36mGET /static/examples/boat_enc-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:20:43,958 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:43] "[36mGET /static/examples/cameraman-1024.png HTTP/1.1[0m" 304 -
+2025-07-01 01:20:47,622 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:47] "GET / HTTP/1.1" 200 -
+2025-07-01 01:20:53,133 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:53] "POST /analyze HTTP/1.1" 200 -
+2025-07-01 01:20:53,152 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:53] "GET /static/analysis/image_01_07_2025_01_20_50/out/hist_in_726a72.png HTTP/1.1" 200 -
+2025-07-01 01:20:53,153 - werkzeug - INFO - 127.0.0.1 - - [01/Jul/2025 01:20:53] "GET /static/analysis/image_01_07_2025_01_20_50/out/corr_in_726a72.png HTTP/1.1" 200 -

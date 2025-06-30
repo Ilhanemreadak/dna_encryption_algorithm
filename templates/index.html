@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DNA Şifreleme Arayüzü</title>
+    <title>DNA Şifreleme & Analiz Arayüzü</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; }
-        .section-title { margin-top: 2rem; margin-bottom: 1rem; }
-        .img-preview, .placeholder-box { max-height: 200px; width: 100%; border: 1px solid #ccc; margin-bottom: 1rem; }
-        .placeholder-box { display: flex; align-items: center; justify-content: center; color: #999; background-color: #fff; border: 2px dashed #ccc; padding: 1rem; font-size: 1rem; height: 200px; transition: all 0.2s ease; }
-        .placeholder-box:hover { background-color: #f4f4f4; border-color: #999; }
-        .hidden { display: none !important; }
-        footer { margin-top: 4rem; padding: 1rem 0; background-color: #e9ecef; text-align: center; }
-    </style>
+    <!-- Özel stil -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <div class="container py-4">
@@ -48,7 +41,7 @@
             <img id="outputImage" src="#" alt="Çıktı Görseli" class="img-fluid img-preview hidden">
 
             <div class="mt-2">
-                <button id="saveBtn" class="btn btn-outline-success">Kaydet</button>
+                <button id="saveBtn" type="button" class="btn btn-outline-success">Kaydet</button>
             </div>
         </div>
     </div>
@@ -115,24 +108,29 @@
         </div>
     </div>
 
+    <!-- Analiz Bölümü -->
     <div class="section-title">
-        <h5>Analizler</h5>
-        <div class="row">
-            <div class="col-md-6 text-center">
-                <h6>Girdi Görseli Analizi</h6>
-                <button id="analyzeInputBtn" class="btn btn-sm btn-outline-info mb-2">Analiz Et</button>
-                <img id="histInputImg" src="#" class="img-fluid img-preview">
-                <img id="corrInputImg" src="#" class="img-fluid img-preview">
-                <p>PSNR: <span id="psnrInputValue">-</span> dB</p>
-            </div>
-            <div class="col-md-6 text-center">
-                <h6>Çıktı Görseli Analizi</h6>
-                <button id="analyzeOutputBtn" class="btn btn-sm btn-outline-info mb-2">Analiz Et</button>
-                <img id="histOutputImg" src="#" class="img-fluid img-preview">
-                <img id="corrOutputImg" src="#" class="img-fluid img-preview">
-                <p>PSNR: <span id="psnrValue">-</span> dB</p>
-            </div>
+        <h5>Analiz</h5>
+        <div class="btn-group" role="group">
+            <button id="ana-btn-compare" type="button" class="btn btn-outline-primary">
+                Karşılaştır ve Analiz Yap
+            </button>
+            <button id="ana-btn-single"  type="button" class="btn btn-outline-primary">
+                Tek Resim Analiz Yap
+            </button>
         </div>
+        </div>
+
+        <!-- Buraya dinamik yükleme alanları gelecek -->
+        <div id="ana-controls" class="mb-4"></div>
+
+        <!-- Sonuç tablosu -->
+        <div id="ana-results" class="d-none">
+        <h6>Sonuçlar</h6>
+        <table class="table table-bordered">
+            <thead><tr><th>Metrik</th><th>Değer</th></tr></thead>
+            <tbody id="ana-table"></tbody>
+        </table>
     </div>
 
     <footer>DNA Şifreleme Algoritması Projesi &copy; 2025</footer>
@@ -211,6 +209,7 @@
         </div>
     </div>
 
+    <!-- Example Images Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -237,387 +236,7 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-    let currentDir = '';
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
 
-    // Yükle butonuna tıklayınca dosya input'u tetiklensin
-    document.getElementById('uploadBtn').addEventListener('click', () => {
-        document.getElementById('imageUpload').click();
-    });
-
-    // Input değiştiğinde dosyayı göster
-    document.getElementById('imageUpload').addEventListener('change', event => {
-        const file = event.target.files[0]; 
-        if (!file) return;
-        currentDir = '';  // önceki analiz temizlensin
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            document.getElementById('inputImage').src = reader.result;
-            document.getElementById('inputImage').classList.remove('hidden');
-            document.getElementById('inputDropArea').classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-    });
-
-    // Sürükle bırak desteği
-    const dropArea = document.getElementById('inputDropArea');
-
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('border-primary');
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('border-primary');
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('border-primary');
-
-        const file = e.dataTransfer.files[0];
-        if (!file) return;
-        currentDir = '';
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            document.getElementById('inputImage').src = reader.result;
-            document.getElementById('inputImage').classList.remove('hidden');
-            dropArea.classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-
-        // 🔧 Ayrıca input'a da dosyayı ata
-        document.getElementById('imageUpload').files = e.dataTransfer.files;
-    });
-
-
-    // Şifrele
-    document.getElementById('encryptBtn').addEventListener('click', async () => {
-        const file = document.getElementById('imageUpload').files[0];
-        if (!file) return alert('Önce girdi görseli yükleyin.');
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('key', document.getElementById('keyInput').value);
-        formData.append('dna_rule', document.getElementById('dnaRuleSelect').value);
-        for (let i = 1; i <= 3; i++) {
-            formData.append('x0[]', document.getElementById(`x0_${i}`).value);
-            formData.append('r[]', document.getElementById(`r_${i}`).value);
-        }
-        const res = await fetch('/encrypt', { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.status === 'success') {
-            currentDir = data.directory;
-            document.getElementById('outputImage').src = data.image_url;
-            document.getElementById('outputImage').classList.remove('hidden');
-            document.getElementById('outputPlaceholder').classList.add('hidden');
-        } else {
-            alert('Şifreleme hatası: ' + data.message);
-        }
-    });
-
-    // Çöz
-    document.getElementById('decryptBtn').addEventListener('click', async () => {
-        // File-input’tan şifreli dosyayı oku
-        const file = document.getElementById('imageUpload').files[0];
-        if (!file) return alert('Önce şifrelenmiş görseli yükleyin.');
-
-        // FormData’ya ekle
-        const formData = new FormData();
-        formData.append('image', file);
-        formData.append('key', document.getElementById('keyInput').value);
-
-        // İsteği at
-        const res = await fetch('/decrypt', { method: 'POST', body: formData });
-        const data = await res.json();
-
-        if (data.status === 'success') {
-            // Sunucudan gelen klasör adını sakla ki analizler çalışsın
-            currentDir = data.directory;
-
-            // Çözülmüş görseli göster
-            const out = document.getElementById('outputImage');
-            out.src = data.image_url;
-            out.classList.remove('hidden');
-            document.getElementById('outputPlaceholder').classList.add('hidden');
-        } else {
-            alert('Çözme hatası: ' + data.message);
-        }
-    });
-
-    // Girdi Analizi
-    document.getElementById('analyzeInputBtn').addEventListener('click', async () => {
-        const file = document.getElementById('imageUpload').files[0];
-        if (!file) return alert('Lütfen bir girdi görseli yükleyin.');
-
-        const fd = new FormData();
-        fd.append('input', file);  // artık input alanı olarak gönderiyoruz
-
-        const res = await fetch('/analyze', { method: 'POST', body: fd });
-        const d = await res.json();
-        if (d.status === 'success') {
-            currentDir = d.directory;
-            document.getElementById('histInputImg').src = d.hist_url;
-            document.getElementById('corrInputImg').src = d.corr_url;
-            document.getElementById('psnrInputValue').textContent = d.psnr;
-        } else {
-            alert('Girdi analizi hatası: ' + d.message);
-        }
-    });
-
-    // Çıktı Analizi
-    document.getElementById('analyzeOutputBtn').addEventListener('click', async () => {
-        const inputSrc = document.getElementById('inputImage').src;
-        const outputSrc = document.getElementById('outputImage').src;
-
-        if (!inputSrc || inputSrc.endsWith('#')) return alert('Girdi görseli yok.');
-        if (!outputSrc || outputSrc.endsWith('#')) return alert('Çıktı görseli yok.');
-
-        const inputBlob = await fetch(inputSrc).then(res => res.blob());
-        const outputBlob = await fetch(outputSrc).then(res => res.blob());
-
-        const fd = new FormData();
-        fd.append('input', inputBlob, 'input.png');
-        fd.append('output', outputBlob, 'output.png');
-
-        const res = await fetch('/analyze', { method: 'POST', body: fd });
-        const d = await res.json();
-        if (d.status === 'success') {
-            currentDir = d.directory;
-            document.getElementById('histOutputImg').src = d.hist_url;
-            document.getElementById('corrOutputImg').src = d.corr_url;
-            document.getElementById('psnrValue').textContent = d.psnr;
-        } else {
-            alert('Çıktı analizi hatası: ' + d.message);
-        }
-    });
-
-    // Crop Attack
-    // Crop & Çöz
-    document.getElementById('cropDecryptBtn').addEventListener('click', async () => {
-        const w = parseInt(document.getElementById('cropWidth').value,  10);
-        const h = parseInt(document.getElementById('cropHeight').value, 10);
-        if (w <= 0 || h <= 0) return alert('Geçerli boyut girin.');
-
-        // 1) Crop request
-        const fd = new FormData();
-        fd.append('width', w);
-        fd.append('height', h);
-        if (currentDir) {
-            fd.append('directory', currentDir);
-        } else {
-            const f = document.getElementById('imageUpload').files[0];
-            if (!f) return alert('Önce dosya seçin.');
-            fd.append('image', f);
-        }
-
-        const cropRes = await fetch('/crop_attack', { method: 'POST', body: fd });
-        const cropData = await cropRes.json();
-        if (cropData.status !== 'success') {
-            return alert('Crop hatası: ' + cropData.message);
-        }
-
-        // 2) Güncellenmiş girdi görselini göster
-        currentDir = cropData.directory;
-        const inp = document.getElementById('inputImage');
-        inp.src = cropData.cropped_url;
-        inp.classList.remove('hidden');
-        document.getElementById('inputDropArea').classList.add('hidden');
-        new bootstrap.Modal(document.getElementById('cropModal')).hide();
-
-        // 3) Decrypt request (directory param’li)
-        const fd2 = new FormData();
-        fd2.append('directory', currentDir);
-        fd2.append('key', document.getElementById('keyInput').value);
-
-        const decRes = await fetch('/decrypt', { method: 'POST', body: fd2 });
-        const decData = await decRes.json();
-        if (decData.status !== 'success') {
-            return alert('Çözme hatası: ' + decData.message);
-        }
-
-        // 4) Çıktıyı göster
-        const out = document.getElementById('outputImage');
-        out.src = decData.image_url;
-        out.classList.remove('hidden');
-        document.getElementById('outputPlaceholder').classList.add('hidden');
-    });
-
-    // Noise Attack
-    document.getElementById('noiseDecryptBtn').addEventListener('click', async () => {
-        const type = document.getElementById('noiseType').value;
-        const strength = parseFloat(document.getElementById('noiseStrength').value);
-        if (isNaN(strength) || strength <= 0) {
-            return alert('Geçerli bir güç değeri girin.');
-        }
-
-        // 1) Noise isteği
-        const fd = new FormData();
-        fd.append('type', type);
-        fd.append('strength', strength);
-        if (currentDir) {
-            fd.append('directory', currentDir);
-        } else {
-            const f = document.getElementById('imageUpload').files[0];
-            if (!f) return alert('Önce dosya seçin.');
-            fd.append('image', f);
-        }
-
-        const res = await fetch('/noise_attack', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.status !== 'success') {
-            return alert('Noise hatası: ' + data.message);
-        }
-
-        // 2) Ana ekranda güncelle
-        currentDir = data.directory;
-        const inp = document.getElementById('inputImage');
-        inp.src = data.noised_url;
-        inp.classList.remove('hidden');
-        document.getElementById('inputDropArea').classList.add('hidden');
-        new bootstrap.Modal(document.getElementById('noiseModal')).hide();
-
-        // 3) Decrypt isteği
-        const fd2 = new FormData();
-        fd2.append('directory', currentDir);
-        fd2.append('key', document.getElementById('keyInput').value);
-
-        const decRes = await fetch('/decrypt', { method: 'POST', body: fd2 });
-        const decData = await decRes.json();
-        if (decData.status !== 'success') {
-            return alert('Çözme hatası: ' + decData.message);
-        }
-
-        // 4) Çıktıyı göster
-        const out = document.getElementById('outputImage');
-        out.src = decData.image_url;
-        out.classList.remove('hidden');
-        document.getElementById('outputPlaceholder').classList.add('hidden');
-    });
-
-    // Key Sensitivity
-    // 1) Bit Gösterme & Toggle
-    document.getElementById('showBitsBtn').addEventListener('click', () => {
-        const key = document.getElementById('keySensInput').value;
-        if (!key) return alert('Önce bir şifre girin.');
-        // String → bit dizisi
-        const bits = Array.from(key).map(ch =>
-            ch.charCodeAt(0).toString(2).padStart(8, '0')
-        ).join('');
-        // container’ı temizle
-        const disp = document.getElementById('bitDisplay');
-        disp.innerHTML = '';
-        // Her bit için span oluştur
-        bits.split('').forEach((b, idx) => {
-            const span = document.createElement('span');
-            span.textContent = b;
-            span.classList.add('bit-span');
-            span.style.cursor = 'pointer';
-            span.style.marginRight = '2px';
-            // tıklayınca toggle
-            span.addEventListener('click', () => {
-            span.textContent = span.textContent === '0' ? '1' : '0';
-            });
-            disp.appendChild(span);
-        });
-        disp.classList.remove('hidden');
-    });
-
-    // 2) Uygula & Çöz
-    document.getElementById('applyKeySensBtn').addEventListener('click', async () => {
-        // 2.1) Editlenmiş bit’leri oku
-        const spans = Array.from(document.querySelectorAll('#bitDisplay .bit-span'));
-        if (spans.length === 0) return alert('Önce "Bit Göster" yapın.');
-        const bits = spans.map(s => s.textContent).join('');
-        // 2.2) Bit → karakter dizisi
-        let newKey = '';
-        for (let i = 0; i < bits.length; i += 8) {
-            const byte = bits.slice(i, i + 8);
-            newKey += String.fromCharCode(parseInt(byte, 2));
-        }
-        // 2.3) Modal’ı kapat
-        new bootstrap.Modal(document.getElementById('keySensModal')).hide();
-
-        // 2.4) Decrypt isteği
-        const fd = new FormData();
-        // directory varsa ekle
-        if (currentDir) {
-            fd.append('directory', currentDir);
-        } else {
-            const f = document.getElementById('imageUpload').files[0];
-            if (!f) return alert('Önce bir dosya seçin.');
-            fd.append('image', f);
-        }
-        fd.append('key', newKey);
-
-        const res = await fetch('/decrypt', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.status !== 'success') {
-            return alert('Çözme hatası: ' + data.message);
-        }
-        // 2.5) Sonucu göster
-        document.getElementById('outputImage').src = data.image_url;
-        document.getElementById('outputImage').classList.remove('hidden');
-        document.getElementById('outputPlaceholder').classList.add('hidden');
-        if (data.directory) currentDir = data.directory;
-    });
-
-    document.getElementById('showExamplesBtn').addEventListener('click', async () => {
-        const container = document.getElementById('exampleImages');
-        container.innerHTML = '';
-
-        const res = await fetch('/example_images');
-        const d = await res.json();
-
-        if (d.status === 'success') {
-            d.images.forEach(async url => {
-            const tr = document.createElement('tr');
-            const tdImg = document.createElement('td');
-            const tdName = document.createElement('td');
-
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = url.split('/').pop();
-            img.style.width = '50px';
-            img.style.height = '50px';
-            img.style.cursor = 'pointer';
-            img.classList.add('rounded', 'border');
-
-            img.addEventListener('click', async () => {
-                const blob = await fetch(url).then(r => r.blob());
-                const file = new File([blob], img.alt, { type: blob.type });
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                document.getElementById('imageUpload').files = dataTransfer.files;
-
-                const reader = new FileReader();
-                reader.onload = () => {
-                document.getElementById('inputImage').src = reader.result;
-                document.getElementById('inputImage').classList.remove('hidden');
-                document.getElementById('inputDropArea').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-
-                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
-                modal.hide();
-            });
-
-            tdImg.appendChild(img);
-            tdName.textContent = img.alt;
-            tr.appendChild(tdImg);
-            tr.appendChild(tdName);
-            container.appendChild(tr);
-            });
-
-            new bootstrap.Modal(document.getElementById('exampleModal')).show();
-        } else {
-            alert('Örnek görseller yüklenemedi.');
-        }
-    });
-
-});
-</script>
 </body>
 </html>
