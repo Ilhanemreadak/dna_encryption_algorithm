@@ -1,4 +1,5 @@
-import os, time
+import os
+import time
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
@@ -258,4 +259,5 @@ def internal(err):
 
 if __name__ == '__main__':
     logger.info("Flask app starting")
-    app.run(host='0.0.0.0', port=5000, debug=True, request_handler=SafeRequestHandler)
+    debug_mode = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode, request_handler=SafeRequestHandler)
