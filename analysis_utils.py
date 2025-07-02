@@ -144,22 +144,29 @@ def compute_average_rgb_neighbor_correlation(img_path: str) -> float:
         return 0.0
 
 
-def compute_psnr(img1_path: str, img2_path: str) -> str:
-    """İki görüntü arasındaki PSNR değerini döner."""
+
+def compute_psnr(img1_path: str, img2_path: str) -> float:
+    """
+    İki görüntü arasındaki PSNR’ı döndürür.
+    - Tüm durumlarda `float` verir: sonsuzluk için `math.inf`, hata varsa `math.nan`.
+    """
     try:
         if not os.path.isfile(img1_path):
-            raise FileNotFoundError(f"Girdi görüntüsü bulunamadı: {img1_path}")
+            raise FileNotFoundError(f"Girdi görüntüsü yok: {img1_path}")
         if not os.path.isfile(img2_path):
-            raise FileNotFoundError(f"Çıktı görüntüsü bulunamadı: {img2_path}")
+            raise FileNotFoundError(f"Çıktı görüntüsü yok: {img2_path}")
 
-        img1 = np.array(Image.open(img1_path).convert('RGB'), dtype=np.float64) / 255.0
-        img2 = np.array(Image.open(img2_path).convert('RGB'), dtype=np.float64) / 255.0
+        img1 = np.asarray(Image.open(img1_path).convert("RGB"), dtype=np.float64) / 255.0
+        img2 = np.asarray(Image.open(img2_path).convert("RGB"), dtype=np.float64) / 255.0
 
-        psnr_val = peak_signal_noise_ratio(img1, img2)
-        return round(psnr_val, 2)
+        mse = np.mean((img1 - img2) ** 2)
+        if mse == 0:
+            return math.inf                # artık str değil
+
+        return peak_signal_noise_ratio(img1, img2)  # zaten float
     except Exception as e:
-        print(f"PSNR hesaplanırken hata oluştu: {e}")
-        return 0.0
+        print(f"PSNR hesaplanırken hata: {e}")
+        return math.nan                    # hata durumunda sayısal NaN
 
 def compute_npcr_uaci(img1_path: str, img2_path: str) -> tuple[float, float]:
     """

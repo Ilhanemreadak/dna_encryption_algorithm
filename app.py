@@ -1,3 +1,4 @@
+import math
 import os
 import time
 from datetime import datetime
@@ -226,9 +227,11 @@ def analyze():
         res.update(hist_urls=[h], corr_urls=[c], entropies=[e])
     else:
         h1,c1,e1=_single(inp_path,'in'); h2,c2,e2=_single(out_path,'out')
-        psnr=compute_psnr(inp_path,out_path); npcr,uaci=compute_npcr_uaci(inp_path,out_path)
+        psnr_raw = compute_psnr(inp_path, out_path)
+        psnr_val = "∞" if math.isinf(psnr_raw) else round(psnr_raw, 4)
+        npcr,uaci=compute_npcr_uaci(inp_path,out_path)
         res.update(hist_urls=[h1,h2], corr_urls=[c1,c2], entropies=[e1,e2],
-                   psnr=round(psnr,4), npcr=round(npcr,4), uaci=round(uaci,4))
+                   psnr=psnr_val, npcr=round(npcr,4), uaci=round(uaci,4))
     return jsonify(res)
 
 @app.route('/example_images')
