@@ -8,27 +8,63 @@ import os
 import math
 
 
-def compute_and_save_histogram(img_path: str, out_path: str):
-    """R, G, B kanalları için histogram çizip bar plot olarak kaydeder."""
+def compute_and_save_histogram(
+        img_path: str,
+        out_path: str,
+        mode: str = "auto",            # ["auto", "log", "clip", "pdf"]
+        clip_pct: float = 99.5         # mode=="clip" ise üst % eşiği
+):
+    """
+        R, G, B kanalları için histogram çizip bar plot olarak kaydeder.
+        Histogramı kaydederken aykırı değerlerden kaynaklanan ölçek sorunlarını önler.
+        mode:
+        • "auto" -> medyan / max oranına bakıp 'log' veya 'clip' seçer
+        • "log"  -> log-ölçekli y-ekseni
+        • "clip" -> üst clip_pct yüzdesini keser
+        • "pdf"  -> normalize edilmiş yoğunluk (probability mass)
+    """
     try:
         if not os.path.isfile(img_path):
-            raise FileNotFoundError(f"Görüntü bulunamadı: {img_path}")
+            raise FileNotFoundError(img_path)
 
-        img = Image.open(img_path).convert('RGB')
-        arr = np.array(img)
-        colors = ('r', 'g', 'b')
+        arr = np.array(Image.open(img_path).convert("RGB"))
+        colors = ("r", "g", "b")
+        bins = np.arange(257)
 
         fig, ax = plt.subplots()
-        bins = np.arange(257)  # 256 bins
+        all_counts = []
+
         for i, col in enumerate(colors):
             channel = arr[:, :, i].ravel()
             hist, _ = np.histogram(channel, bins=bins, range=(0, 256))
-            ax.bar(bins[:-1], hist, color=col, alpha=0.3, width=1)
+            all_counts.append(hist)
+            ax.bar(bins[:-1], hist, color=col, alpha=0.35, width=1)
 
-        ax.set_title('Histogram')
-        ax.set_xlabel('Pixel değeri')
-        ax.set_ylabel('Frekans')
+        all_counts = np.concatenate(all_counts)
+        maxc, medc = all_counts.max(), np.median(all_counts)
 
+        if mode == "auto":
+            mode = "log" if maxc > 10 * medc else "clip"
+
+        if mode == "log":
+            ax.set_yscale("log", nonpositive="clip")
+
+        elif mode == "clip":
+            ymax = np.percentile(all_counts, clip_pct)
+            ax.set_ylim(0, ymax)
+
+        elif mode == "pdf":
+            ax.clear()
+            for i, col in enumerate(colors):
+                channel = arr[:, :, i].ravel()
+                hist, _ = np.histogram(channel, bins=bins, range=(0, 256),
+                                    density=True)  # <- normalize
+                ax.bar(bins[:-1], hist, color=col, alpha=0.35, width=1)
+
+        ax.set_title("Histogram")
+        ax.set_xlabel("Piksel değeri")
+        ax.set_ylabel("Frekans" if mode != "pdf" else "Yoğunluk")
+        fig.tight_layout()
         fig.savefig(out_path)
         plt.close(fig)
     except Exception as e:
