@@ -189,23 +189,31 @@ def compute_npcr_uaci(img1_path: str, img2_path: str) -> tuple[float, float]:
         if not os.path.isfile(img2_path):
             raise FileNotFoundError(f"Görüntü bulunamadı: {img2_path}")
 
-        img1 = np.array(Image.open(img1_path).convert('RGB'), dtype=np.uint8)
-        img2 = np.array(Image.open(img2_path).convert('RGB'), dtype=np.uint8)
-
-        M, N, _ = img1.shape
-        uaci_total = 0
-        npcr_total = 0
-
-        for ch in range(3):
+        img1 = np.asarray(Image.open(img1_path).convert("RGB"), dtype=np.float32)
+        img2 = np.asarray(Image.open(img2_path).convert("RGB"), dtype=np.float32)
+        
+        M, N, C = img1.shape
+        uaci_channels = []
+        npcr_channels = []
+        
+        for ch in range(C):
             c1 = img1[:, :, ch]
             c2 = img2[:, :, ch]
-            diff = c1 != c2
-            uaci = np.sum(np.abs(c1.astype(np.int16) - c2.astype(np.int16))) / (255 * M * N) * 100
-            npcr = np.sum(diff) / (M * N) * 100
-            uaci_total += uaci
-            npcr_total += npcr
+            
+            # Her kanal için UACI ve NPCR
+            diff_pixels = np.sum(c1 != c2)
+            npcr = (diff_pixels / (M * N)) * 100
+            
+            uaci = (np.sum(np.abs(c1 - c2)) / (255 * M * N)) * 100
+            
+            uaci_channels.append(uaci)
+            npcr_channels.append(npcr)
+        
+        # Ortalama değerler
+        avg_uaci = np.mean(uaci_channels)
+        avg_npcr = np.mean(npcr_channels)
 
-        return round(npcr_total / 3, 5), round(uaci_total / 3, 5)
+        return round(avg_npcr, 5), round(avg_uaci, 5)
     except Exception as e:
         print(f"NPCR/UACI hesaplanırken hata oluştu: {e}")
         return 0.0, 0.0
