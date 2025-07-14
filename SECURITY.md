@@ -4,18 +4,6 @@ Thank you for helping to keep **DNA Encryption Algorithm** and its users safe! T
 
 ---
 
-## 📌 Supported Versions
-
-| Version | Status                   | Supported Until |
-| ------- | ------------------------ | --------------- |
-| 1.x     | **✅ Actively supported** | *Current*       |
-| 0.x     | 🔒 Security‑fixes only   | 31 Dec 2025     |
-| < 0.x   | ❌ End‑of‑life            | —               |
-
-We encourage all users to upgrade to the latest release.
-
----
-
 ## 🛠️ Reporting a Vulnerability
 
 Please **do not open public issues or pull requests** for security problems.
